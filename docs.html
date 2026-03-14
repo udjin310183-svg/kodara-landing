@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kodara — Documentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F7F7F5;
+    --forest: #1A3C2B;
+    --border: rgba(58,58,56,0.20);
+    --coral: #FF8C69;
+    --mint: #9EFFBF;
+    --gold: #F4D35E;
+    --white: #FFFFFF;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--forest);
+    font-family: var(--font-display);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ── Header ── */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 64px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    z-index: 100;
+  }
+
+  .header-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: var(--forest);
+  }
+  .logo-box {
+    width: 32px; height: 32px;
+    background: var(--forest);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-box span { color: #fff; font-family: var(--font-mono); font-size: 14px; font-weight: 600; }
+  .logo-name { font-family: var(--font-display); font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+
+  header nav a {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--forest);
+    opacity: 0.6;
+    text-decoration: none;
+    margin-left: 24px;
+  }
+  header nav a:hover { opacity: 1; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    text-decoration: none; cursor: pointer; border: none;
+    transition: all 0.2s;
+  }
+  .btn-solid {
+    background: var(--forest); color: #fff;
+    padding: 0 16px; height: 36px;
+  }
+  .btn-solid:hover { background: #2d6347; }
+
+  /* ── Layout ── */
+  .docs-layout {
+    display: flex;
+    min-height: 100vh;
+    padding-top: 64px;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    padding: 40px 0;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+  }
+
+  .sidebar-section {
+    margin-bottom: 32px;
+    padding: 0 24px;
+  }
+
+  .sidebar-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.4;
+    margin-bottom: 10px;
+  }
+
+  .sidebar-link {
+    display: block;
+    font-size: 13px;
+    color: var(--forest);
+    text-decoration: none;
+    opacity: 0.65;
+    padding: 5px 0;
+    transition: opacity 0.15s;
+  }
+  .sidebar-link:hover { opacity: 1; }
+  .sidebar-link.active { opacity: 1; font-weight: 600; }
+
+  /* ── Content ── */
+  .docs-content {
+    flex: 1;
+    padding: 48px 64px;
+    max-width: 860px;
+  }
+
+  .docs-section {
+    margin-bottom: 64px;
+    padding-bottom: 64px;
+    border-bottom: 1px solid var(--border);
+  }
+  .docs-section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.4;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    margin-top: 8px;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    margin-top: 32px;
+  }
+
+  p { opacity: 0.75; margin-bottom: 16px; line-height: 1.7; }
+
+  /* ── Code blocks ── */
+  pre {
+    background: var(--forest);
+    color: var(--mint);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.8;
+    padding: 20px 24px;
+    margin: 16px 0;
+    overflow-x: auto;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: rgba(26,60,43,0.08);
+    padding: 2px 6px;
+    color: var(--forest);
+  }
+
+  /* ── Command table ── */
+  .command-list { margin: 16px 0; }
+
+  .command-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .command-row:last-child { border-bottom: none; }
+
+  .command-dot {
+    width: 8px; height: 8px;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .command-name {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 220px;
+    flex-shrink: 0;
+  }
+
+  .command-desc {
+    font-size: 13px;
+    opacity: 0.65;
+    line-height: 1.5;
+  }
+
+  /* ── Steps ── */
+  .steps { margin: 24px 0; }
+
+  .step {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .step-num {
+    width: 28px; height: 28px;
+    background: var(--forest);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-content h3 { margin-top: 4px; margin-bottom: 6px; font-size: 15px; }
+  .step-content p { margin-bottom: 8px; font-size: 13px; }
+
+  /* ── Badge ── */
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .dot { width: 8px; height: 8px; flex-shrink: 0; }
+  .mint { background: var(--mint); }
+  .gold { background: var(--gold); }
+  .coral { background: var(--coral); }
+
+  /* ── Note box ── */
+  .note {
+    border-left: 3px solid var(--mint);
+    background: rgba(158,255,191,0.08);
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 13px;
+  }
+  .note strong { font-weight: 600; opacity: 1; }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .docs-content { padding: 32px 24px; }
+    h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <a href="index.html" class="header-logo">
+    <div class="logo-box"><span>K</span></div>
+    <span class="logo-name">Kodara</span>
+  </a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="index.html#pricing">Pricing</a>
+    <a href="docs.html" style="opacity:1;">Docs</a>
+  </nav>
+  <a href="https://tally.so/r/5BkybP" target="_blank" rel="noopener noreferrer" class="btn btn-solid" style="height:36px;padding:0 14px;">Get Started</a>
+</header>
+
+<!-- ── LAYOUT ── -->
+<div class="docs-layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Getting Started</div>
+      <a href="#why" class="sidebar-link">Why Kodara</a>
+      <a href="#prerequisites" class="sidebar-link">Prerequisites</a>
+      <a href="#installation" class="sidebar-link">Installation</a>
+      <a href="#quickstart" class="sidebar-link">Quick Start</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Core Commands</div>
+      <a href="#cmd-init" class="sidebar-link">kodara init</a>
+      <a href="#cmd-ask" class="sidebar-link">kodara ask</a>
+      <a href="#cmd-impact" class="sidebar-link">kodara impact</a>
+      <a href="#cmd-onboard" class="sidebar-link">kodara onboard</a>
+      <a href="#cmd-history" class="sidebar-link">kodara history</a>
+      <a href="#cmd-context" class="sidebar-link">kodara context</a>
+      <a href="#cmd-review" class="sidebar-link">kodara review</a>
+      <a href="#cmd-diff" class="sidebar-link">kodara diff</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Memory Commands</div>
+      <a href="#cmd-note" class="sidebar-link">kodara note</a>
+      <a href="#cmd-snapshot" class="sidebar-link">kodara snapshot</a>
+      <a href="#cmd-stats" class="sidebar-link">kodara stats</a>
+      <a href="#cmd-status" class="sidebar-link">kodara status</a>
+      <a href="#cmd-hook" class="sidebar-link">kodara install-hook</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Use Cases</div>
+      <a href="#usecase-ask" class="sidebar-link">AI context workflow</a>
+      <a href="#usecase-impact" class="sidebar-link">Before a refactor</a>
+      <a href="#usecase-onboard" class="sidebar-link">New team member</a>
+      <a href="#usecase-patterns" class="sidebar-link">Build from patterns</a>
+    </div>
+  </aside>
+
+  <!-- ── CONTENT ── -->
+  <main class="docs-content">
+
+    <!-- Introduction -->
+    <div class="docs-section" id="intro">
+      <div class="section-label">Documentation</div>
+      <h1>Kodara Docs</h1>
+      <p>Kodara builds architectural memory for your codebase — so your AI gets surgical context instead of re-reading everything every time.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;">
+        <div class="badge"><div class="dot mint"></div><span>v0.2.2</span></div>
+        <div class="badge"><div class="dot mint"></div><span>Python 3.8+</span></div>
+        <div class="badge"><div class="dot mint"></div><span>Any AI tool</span></div>
+      </div>
+    </div>
+
+    <!-- Why Kodara -->
+    <div class="docs-section" id="why">
+      <div class="section-label">Getting Started</div>
+      <h2>Why Kodara — Token Savings</h2>
+      <p>Every time you ask an AI about your code, it reads the entire codebase. That's expensive. Kodara fixes this by giving your AI only the 2–8 files that actually matter.</p>
+
+      <h3>The problem: AI reads everything</h3>
+      <p>On a typical 44-file Python project, a single query without Kodara reads <strong>41,160 tokens</strong>. Multiply by your daily queries and team size — costs compound fast.</p>
+
+      <pre># Without Kodara — ChatGPT GPT-4o ($2.50/1M input tokens)
+1 query  = 41,160 tokens = $0.10
+5 queries = 205,800 tokens = $0.52
+20 queries/day = ~$2.06/day = ~$45/month per dev
+
+# With Kodara — same queries
+1 query  = 1,840 tokens  = $0.005
+5 queries = 9,200 tokens = $0.023
+20 queries/day = ~$0.09/day = ~$2/month per dev
+
+# Savings: 94% — ~$43/month per dev on GPT-4o</pre>
+
+      <h3>Real numbers across AI tools</h3>
+      <p style="font-size:13px;opacity:0.6;">API pricing as of 2026. Applies to direct API usage, Cursor API mode, self-hosted setups, and any tool billed per token.</p>
+
+      <div style="border:1px solid var(--border);margin:16px 0;">
+        <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;border-bottom:1px solid var(--border);">
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:9px;text-transform:uppercase;letter-spacing:0.1em;opacity:0.4;">AI Tool</div>
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:9px;text-transform:uppercase;letter-spacing:0.1em;opacity:0.4;">Input price</div>
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:9px;text-transform:uppercase;letter-spacing:0.1em;opacity:0.4;">Without Kodara</div>
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:9px;text-transform:uppercase;letter-spacing:0.1em;opacity:0.4;">With Kodara</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;border-bottom:1px solid var(--border);background:#fff;">
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:12px;font-weight:600;">GPT-4o</div>
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:12px;opacity:0.65;">$2.50 / 1M</div>
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:12px;opacity:0.65;">$0.103 / query</div>
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:12px;color:var(--forest);font-weight:600;">$0.005 / query</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;border-bottom:1px solid var(--border);">
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:12px;font-weight:600;">Claude Sonnet</div>
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:12px;opacity:0.65;">$3.00 / 1M</div>
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:12px;opacity:0.65;">$0.123 / query</div>
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:12px;color:var(--forest);font-weight:600;">$0.006 / query</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;background:#fff;">
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:12px;font-weight:600;">Gemini Pro</div>
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:12px;opacity:0.65;">$2.00 / 1M</div>
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:12px;opacity:0.65;">$0.082 / query</div>
+          <div style="padding:10px 14px;font-family:var(--font-mono);font-size:12px;color:var(--forest);font-weight:600;">$0.004 / query</div>
+        </div>
+      </div>
+
+      <p style="font-size:12px;opacity:0.45;font-family:var(--font-mono);">* 44-file Python project. Without Kodara: 41,160 tokens (full read). With Kodara: 1,840 tokens (3 relevant modules). 94.5% reduction.</p>
+
+      <h3>Monthly savings per developer</h3>
+      <pre># GPT-4o ($2.50/1M input), 44-file project
+Light  (20 queries/day, ~440/month): save  ~$43/month
+Medium (50 queries/day, ~1,100/month): save ~$108/month
+Heavy (100 queries/day, ~2,200/month): save ~$216/month
+
+# Claude Sonnet ($3.00/1M input)
+Light  (20 queries/day): save  ~$52/month
+Medium (50 queries/day): save ~$130/month
+Heavy (100 queries/day): save ~$260/month
+
+# Kodara Pro = $19/month.
+# Medium GPT-4o user saves $108/month. ROI: 5.7x.
+# Medium Claude user saves $130/month.  ROI: 6.8x.</pre>
+
+      <h3>Works with free models too</h3>
+      <p>Kodara's output is plain text — paste it into any AI tool, including free tiers. Kodara gives a free model (Gemini Free, Kimi K2, etc.) the same architectural awareness as a paid subscription.</p>
+      <div class="note">
+        <strong>The quality isn't in the model. It's in the context.</strong> A free model with Kodara context outperforms a paid model reading your entire codebase blindly.
+      </div>
+    </div>
+
+    <!-- Prerequisites -->
+    <div class="docs-section" id="prerequisites">
+      <div class="section-label">Getting Started</div>
+      <h2>Prerequisites</h2>
+      <p>Kodara requires Python 3.8 or higher. If you don't have Python installed, download it from <strong>python.org</strong> — pip is included automatically.</p>
+      <pre>python --version
+# Python 3.8.0 or higher required</pre>
+      <div class="note">
+        <strong>New to Python?</strong> Download it from python.org, run the installer, and make sure to check "Add Python to PATH" during installation.
+      </div>
+    </div>
+
+    <!-- Installation -->
+    <div class="docs-section" id="installation">
+      <h2>Installation</h2>
+      <p>Install Kodara via pip — no API keys, no configuration required.</p>
+      <pre>pip install kodara</pre>
+      <p>Verify the installation:</p>
+      <pre>kodara --version
+# kodara, version 0.2.2</pre>
+    </div>
+
+    <!-- Quick Start -->
+    <div class="docs-section" id="quickstart">
+      <h2>Quick Start</h2>
+      <p>Three commands to get up and running in under 60 seconds.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>Navigate to your project</h3>
+            <pre>cd your-project</pre>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>Build project memory</h3>
+            <p>Scans your codebase, builds a dependency graph, and stores memory in <code>.kodara/</code>.</p>
+            <pre>kodara init</pre>
+            <p>Output example:</p>
+            <pre>  Kodara — Initialising my-project
+  Files:    83
+  Languages: {'python': 83}
+  Edges:    208
+  Git:      main - 522 commits
+  Done in:  0.8s
+
+  kodara ask "How does routing work?"</pre>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Ask anything about your codebase</h3>
+            <p>Copy the output and paste it into Claude, ChatGPT, Cursor, or any AI tool.</p>
+            <pre>kodara ask "How does authentication work?"</pre>
+            <p>Output example:</p>
+            <pre># Context: How does authentication work?
+
+## auth/middleware.py
+Defines AuthMiddleware. Exports: verify_token, require_auth.
+Depends on: jwt_service.py, models/user.py
+
+## auth/jwt_service.py
+Defines JWTService. Exports: encode, decode, refresh.
+
+[3/83 modules · ~1,840 tokens · 94% reduction]</pre>
+          </div>
+        </div>
+      </div>
+      <div class="note">
+        <strong>That's it.</strong> Paste the output into your AI tool as context before asking your question. Your AI now knows exactly which parts of the codebase are relevant.
+      </div>
+    </div>
+
+    <!-- Commands -->
+    <div class="docs-section" id="cmd-init">
+      <div class="section-label">Core Commands</div>
+      <h2>kodara init</h2>
+      <p>Scans your project, builds a dependency graph, generates summaries, and stores everything in <code>.kodara/</code>. Run once per project, then re-run after major changes.</p>
+      <pre>kodara init
+kodara init --full          # Force full re-index (ignore cache)
+kodara init --no-summaries  # Skip summary generation (faster)</pre>
+      <div class="note">
+        <strong>Incremental by default.</strong> Re-running <code>kodara init</code> only processes changed files. Cached summaries are reused.
+      </div>
+    </div>
+
+    <div class="docs-section" id="cmd-ask">
+      <h2>kodara ask</h2>
+      <p>Returns the most relevant modules for your query using IDF-weighted semantic search + dependency graph expansion. Paste the output into any AI tool as context.</p>
+      <pre>kodara ask "How does routing work?"
+kodara ask "Where is payment handled?"
+kodara ask "What happens when a user logs in?"</pre>
+      <p>The output is formatted as structured markdown — ready to paste directly into Claude, ChatGPT, Cursor, or any AI tool.</p>
+    </div>
+
+    <div class="docs-section" id="cmd-impact">
+      <h2>kodara impact</h2>
+      <p>Shows what breaks if a file changes. Uses BFS traversal through the reverse dependency graph to surface all affected modules, ranked by depth and risk.</p>
+      <pre>kodara impact auth/middleware.py
+kodara impact                    # Auto-selects the most critical file</pre>
+      <p>Output example:</p>
+      <pre>Impact Analysis — auth.middleware
+Risk: HIGH  Affects 23 modules (28% of codebase)
+
+Direct dependents (8) — will break immediately:
+  api/routes.py
+  api/v2/routes.py
+  ...
+
+Indirect dependents (15) — affected through the chain:
+  services/user.py (depth 2)
+  ...</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-onboard">
+      <h2>kodara onboard</h2>
+      <p>Generates a structured reading guide for a new developer. Based on dependency layers and git activity — no LLM needed.</p>
+      <pre>kodara onboard</pre>
+      <p>Output: an ordered reading list from entry points → core modules → foundation → utilities, with reasons why each file matters.</p>
+    </div>
+
+    <div class="docs-section" id="cmd-history">
+      <h2>kodara history</h2>
+      <p>Shows git history for a file — commit count, last author, top contributors.</p>
+      <pre>kodara history auth/middleware.py
+kodara history               # Auto-selects most committed file</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-context">
+      <h2>kodara context</h2>
+      <p>Generates an <code>ARCHITECTURE.md</code> file in your project root — a human-readable overview of your codebase structure.</p>
+      <pre>kodara context</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-review">
+      <h2>kodara review</h2>
+      <p>Analyzes your uncommitted changes and shows what they impact across the codebase.</p>
+      <pre>kodara review</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-diff">
+      <h2>kodara diff</h2>
+      <p>Shows impact analysis compared to a branch or commit.</p>
+      <pre>kodara diff main
+kodara diff HEAD~3</pre>
+    </div>
+
+    <!-- Memory Commands -->
+    <div class="docs-section" id="cmd-note">
+      <div class="section-label">Memory Commands</div>
+      <h2>kodara note</h2>
+      <p>Annotate files with the WHY — decisions, context, warnings that code alone can't explain.</p>
+      <pre>kodara note add auth/jwt.py "Using RS256 not HS256 — security audit requirement"
+kodara note list
+kodara note list auth/jwt.py</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-snapshot">
+      <h2>kodara snapshot</h2>
+      <p>Save a snapshot of the current project memory state. Useful before major refactors.</p>
+      <pre>kodara snapshot
+kodara snapshot list</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-stats">
+      <h2>kodara stats</h2>
+      <p>Shows how many tokens and money you've saved using Kodara.</p>
+      <pre>kodara stats</pre>
+      <p>Output example:</p>
+      <pre>Kodara Stats — my-project
+
+  Today
+    Queries:      12
+    Tokens saved: 487,320  (97% reduction)
+    Money saved:  $7.31
+
+  All time
+    Tokens saved: 2,341,880
+    Money saved:  $35.13</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-status">
+      <h2>kodara status</h2>
+      <p>Shows the current state of the index — file count, last updated, memory location.</p>
+      <pre>kodara status</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-hook">
+      <h2>kodara install-hook</h2>
+      <p>Installs a git post-commit hook that automatically updates the Kodara index after every commit. Keeps your memory always fresh.</p>
+      <pre>kodara install-hook          # Install
+kodara uninstall-hook        # Remove</pre>
+      <div class="note">
+        <strong>Recommended.</strong> Install this once and never think about keeping the index up to date again.
+      </div>
+    </div>
+
+    <!-- Use Cases -->
+    <div class="docs-section" id="usecase-ask">
+      <div class="section-label">Use Cases</div>
+      <h2>AI context workflow</h2>
+      <p>The core workflow — use Kodara to get surgical context, then paste it into your AI tool.</p>
+      <pre># 1. Get context for your question
+kodara ask "How does the payment flow work?"
+
+# 2. Copy the output
+# 3. Paste into Claude / ChatGPT / Cursor as context
+# 4. Ask your question
+
+# Result: AI answers with full architectural awareness
+# instead of guessing from scratch</pre>
+      <p>This works with any AI tool — Claude, ChatGPT, Cursor, Copilot, Gemini, or any local model.</p>
+    </div>
+
+    <div class="docs-section" id="usecase-impact">
+      <h2>Before a refactor</h2>
+      <p>Always run impact analysis before changing a critical file.</p>
+      <pre># Before touching auth/middleware.py
+kodara impact auth/middleware.py
+
+# See exactly what breaks, at what depth
+# Make an informed decision before writing a single line</pre>
+    </div>
+
+    <div class="docs-section" id="usecase-onboard">
+      <h2>New team member</h2>
+      <p>Generate a reading guide for anyone joining the project.</p>
+      <pre>kodara onboard
+
+# Output: ordered reading list
+# 01 → main.py           (entry point)
+# 02 → api/server.py     (core hub)
+# 03 → auth/middleware.py (foundation)
+# ...
+
+# New developer is productive in hours, not days</pre>
+    </div>
+
+    <div class="docs-section" id="usecase-patterns">
+      <h2>Build from patterns</h2>
+      <p>Scan real-world repositories to extract architectural patterns, then use a free LLM to build production-ready code based on those patterns.</p>
+      <pre># Scan 3 repos
+cd flask-repo   && kodara init
+cd starlette-repo && kodara init
+cd bottle-repo  && kodara init
+
+# Feed .kodara/ context to any free LLM (Gemini, Kimi, etc.)
+# Prompt: "Based on these architectural patterns, build a web app"
+
+# Result: production-ready code combining the best patterns
+# from all three frameworks — no source code needed</pre>
+      <div class="note">
+        <strong>Senior engineer knowledge. Free model. One prompt.</strong> Kodara gives any LLM the architectural context of real production codebases.
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

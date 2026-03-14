@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kodara — Memory for AI Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ── Reset & Base ─────────────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F7F7F5;
+    --forest: #1A3C2B;
+    --border: rgba(58,58,56,0.20);
+    --border-solid: #3A3A38;
+    --coral: #FF8C69;
+    --mint: #9EFFBF;
+    --gold: #F4D35E;
+    --white: #FFFFFF;
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--bg);
+    color: var(--forest);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cdefs%3E%3Cpattern id='grid' width='40' height='40' patternUnits='userSpaceOnUse'%3E%3Cpath d='M 40 0 L 0 0 0 40' fill='none' stroke='%233A3A38' stroke-width='0.5' opacity='0.15'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='320' height='320' fill='url(%23grid)'/%3E%3C/svg%3E");
+  }
+
+  /* ── Typography helpers ───────────────────────────────────────────────── */
+  .mono {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--forest);
+  }
+
+  .mono-sm { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .mono-md { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em; }
+  .mono-lg { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.04em; }
+
+  /* ── Status Badge ─────────────────────────────────────────────────────── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+  }
+  .badge .dot {
+    width: 8px; height: 8px;
+    flex-shrink: 0;
+  }
+  .badge .dot.mint { background: var(--mint); }
+  .badge .dot.gold { background: var(--gold); }
+  .badge .dot.coral { background: var(--coral); }
+  .badge .dot.forest { background: var(--forest); }
+  .badge span { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; }
+
+  /* ── Buttons ──────────────────────────────────────────────────────────── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    padding: 0 20px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.4s var(--ease);
+    border: none;
+    outline: none;
+  }
+  .btn:focus-visible {
+    outline: 2px solid var(--forest);
+    outline-offset: 3px;
+  }
+  .btn-solid {
+    background: var(--forest);
+    color: var(--white);
+    border: 1px solid var(--forest);
+  }
+  .btn-solid:hover { background: #0f2419; border-color: #0f2419; }
+  .btn-outline {
+    background: transparent;
+    color: var(--forest);
+    border: 1px solid var(--forest);
+  }
+  .btn-outline:hover { background: var(--forest); color: var(--white); }
+  .btn-white {
+    background: var(--white);
+    color: var(--forest);
+    border: 1px solid var(--white);
+  }
+
+  /* ── Header ───────────────────────────────────────────────────────────── */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 64px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    gap: 40px;
+  }
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .logo-box {
+    width: 32px; height: 32px;
+    background: var(--forest);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .logo-box span {
+    color: var(--white);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .logo-name {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--forest);
+    letter-spacing: -0.02em;
+  }
+  nav {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+  }
+  nav a {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--forest);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.3s var(--ease);
+  }
+  nav a:hover { opacity: 1; }
+  .header-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+  /* ── Main Content ─────────────────────────────────────────────────────── */
+  main { padding-top: 64px; }
+  section { padding: 80px 40px; max-width: 1280px; margin: 0 auto; }
+
+  /* ── Hero ─────────────────────────────────────────────────────────────── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+  .hero-left { display: flex; flex-direction: column; gap: 24px; }
+  .hero-heading {
+    font-family: var(--font-display);
+    font-size: 88px;
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--forest);
+  }
+  .hero-desc-wrapper {
+    display: flex;
+    gap: 16px;
+  }
+  .hero-desc-line {
+    width: 1px;
+    background: var(--forest);
+    flex-shrink: 0;
+    margin: 4px 0;
+  }
+  .hero-desc { font-size: 17px; font-weight: 400; line-height: 1.65; opacity: 0.75; }
+  .hero-metric {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.55;
+  }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* ── Technical Mockup Card ────────────────────────────────────────────── */
+  .mockup-card {
+    border: 1px solid var(--border);
+    background: var(--bg);
+    position: relative;
+  }
+  .mockup-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .mockup-card-body { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .mockup-box {
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+  }
+  .mockup-box-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.5;
+    margin-bottom: 8px;
+  }
+  .mockup-code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--forest);
+  }
+  .mockup-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .mockup-row:last-child { margin-bottom: 0; }
+
+  /* Circle graphic ─────────────────────────────────────────────────── */
+  .circle-graphic {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 8px auto;
+  }
+  .circle-graphic svg { position: absolute; top: 0; left: 0; }
+  .circle-dot {
+    position: absolute;
+    width: 8px; height: 8px;
+    transform: translate(-50%, -50%);
+  }
+
+  /* ── Section Divider ──────────────────────────────────────────────────── */
+  .section-divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  /* ── Section Header ───────────────────────────────────────────────────── */
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+  .section-index {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.45;
+    padding-top: 6px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+
+  /* ── Problem Section ──────────────────────────────────────────────────── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .problem-col {
+    background: var(--bg);
+    padding: 40px;
+  }
+  .problem-col-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 24px;
+    opacity: 0.6;
+  }
+  .problem-items { display: flex; flex-direction: column; gap: 14px; }
+  .problem-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .problem-item .dot { flex-shrink: 0; margin-top: 6px; }
+  .problem-num {
+    font-family: var(--font-mono);
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── Features Bento ───────────────────────────────────────────────────── */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .bento-cell {
+    background: var(--bg);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-left: 4px solid transparent;
+  }
+  .bento-cell.coral { border-left-color: var(--coral); }
+  .bento-cell.mint  { border-left-color: var(--mint); }
+  .bento-cell.gold  { border-left-color: var(--gold); }
+  .bento-cell.forest { border-left-color: var(--forest); }
+  .bento-index {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.5;
+  }
+  .bento-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .bento-desc { font-size: 14px; line-height: 1.6; opacity: 0.7; flex: 1; }
+  .bento-code {
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.8;
+    color: var(--forest);
+    white-space: pre;
+  }
+
+  /* ── Cost Comparison ──────────────────────────────────────────────────── */
+  .cost-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .cost-col {
+    background: var(--bg);
+    padding: 40px;
+  }
+  .cost-col.dark {
+    background: var(--forest);
+    color: var(--white);
+  }
+  .cost-col.dark .mono-sm { color: var(--mint); }
+  .cost-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.5;
+    margin-bottom: 8px;
+  }
+  .cost-big {
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .cost-big.green { color: var(--mint); }
+  .cost-sub { font-size: 13px; opacity: 0.6; margin-bottom: 24px; }
+  .cost-items { display: flex; flex-direction: column; gap: 10px; }
+  .cost-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+  }
+  .savings-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .savings-cell {
+    background: var(--bg);
+    padding: 28px 32px;
+    position: relative;
+  }
+  .savings-cell::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--mint);
+  }
+  .savings-usage {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.5;
+    margin-bottom: 12px;
+  }
+  .savings-amount {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .savings-period {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    opacity: 0.5;
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .roi-bar {
+    border: 1px solid var(--border);
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .roi-text { font-size: 15px; line-height: 1.6; opacity: 0.75; }
+  .roi-text strong { opacity: 1; color: var(--forest); }
+
+  /* ── Commands Section ─────────────────────────────────────────────────── */
+  .commands-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .commands-group {
+    background: var(--bg);
+    padding: 32px;
+  }
+  .commands-group-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.5;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .command-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .command-item:last-child { border-bottom: none; }
+  .command-name {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--forest);
+  }
+  .command-desc {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    opacity: 0.5;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── Testimonials ─────────────────────────────────────────────────────── */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .testimonial-card {
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+  }
+  .testimonial-body {
+    padding: 28px;
+    flex: 1;
+    position: relative;
+  }
+  .testimonial-badge {
+    position: absolute;
+    top: 24px; right: 24px;
+  }
+  .testimonial-quote {
+    font-size: 15px;
+    line-height: 1.65;
+    opacity: 0.8;
+    padding-right: 60px;
+  }
+  .testimonial-footer {
+    padding: 16px 28px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .avatar {
+    width: 32px; height: 32px;
+    background: var(--forest);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0;
+  }
+  .avatar.mint-bg { background: var(--mint); color: var(--forest); }
+  .avatar.gold-bg { background: var(--gold); color: var(--forest); }
+  .avatar.coral-bg { background: var(--coral); color: var(--forest); }
+  .testimonial-meta { display: flex; flex-direction: column; gap: 3px; }
+  .testimonial-name { font-size: 13px; font-weight: 600; }
+  .testimonial-role { font-family: var(--font-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.5; }
+
+  /* ── Pricing ──────────────────────────────────────────────────────────── */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .pricing-card {
+    background: var(--bg);
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .pricing-card.featured {
+    background: var(--forest);
+    color: var(--white);
+  }
+  .pricing-card.featured .pricing-price,
+  .pricing-card.featured .pricing-name { color: var(--white); }
+  .pricing-card.featured .feature-item { color: rgba(255,255,255,0.85); }
+  .pricing-card.featured .pricing-period { color: rgba(255,255,255,0.5); }
+  .pricing-header { display: flex; align-items: center; justify-content: space-between; }
+  .pricing-name {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--forest);
+    opacity: 0.6;
+  }
+  .pricing-price {
+    font-family: var(--font-display);
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--forest);
+  }
+  .pricing-period {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.5;
+    margin-top: 4px;
+  }
+  .pricing-divider { height: 1px; background: var(--border); }
+  .pricing-card.featured .pricing-divider { background: rgba(255,255,255,0.15); }
+  .feature-list { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--forest);
+  }
+
+  /* ── CTA Section ──────────────────────────────────────────────────────── */
+  .cta-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px 40px;
+  }
+  .cta-box {
+    width: 100%;
+    max-width: 640px;
+    padding: 60px;
+    position: relative;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  /* L-shaped corners */
+  .cta-box::before, .cta-box::after,
+  .cta-box .corner-bl, .cta-box .corner-br {
+    content: '';
+    position: absolute;
+    width: 12px; height: 12px;
+    border-color: var(--forest);
+    border-style: solid;
+  }
+  .cta-box::before { top: 0; left: 0; border-width: 2px 0 0 2px; }
+  .cta-box::after  { top: 0; right: 0; border-width: 2px 2px 0 0; }
+  .cta-box .corner-bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+  .cta-box .corner-br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: 52px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+  }
+  .cta-input-row {
+    display: flex;
+    gap: 0;
+    width: 100%;
+    max-width: 440px;
+    border: 1px solid var(--forest);
+  }
+  .cta-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+  }
+  .cta-input:focus-visible {
+    outline: 2px solid var(--forest);
+    outline-offset: -2px;
+  }
+  .cta-input {
+    padding: 0 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--forest);
+    height: 44px;
+  }
+  .cta-sub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.45;
+  }
+  .cta-links { display: flex; gap: 24px; }
+  .cta-links a {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--forest);
+    text-decoration: none;
+    opacity: 0.5;
+    transition: opacity 0.3s var(--ease);
+  }
+  .cta-links a:hover { opacity: 1; }
+
+  /* ── Footer ───────────────────────────────────────────────────────────── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .footer-brand { font-size: 13px; opacity: 0.6; }
+  .footer-nav { display: flex; gap: 24px; }
+  .footer-nav a {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--forest);
+    text-decoration: none;
+    opacity: 0.5;
+    transition: opacity 0.3s var(--ease);
+  }
+  .footer-nav a:hover { opacity: 1; }
+  .footer-right { display: flex; align-items: center; flex-direction: column; gap: 8px; align-items: flex-end; }
+  .footer-pip {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    opacity: 0.6;
+  }
+
+  /* ── Fade-in animations ───────────────────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.6s var(--ease) both; }
+  .fade-up-1 { animation-delay: 0.1s; }
+  .fade-up-2 { animation-delay: 0.2s; }
+  .fade-up-3 { animation-delay: 0.3s; }
+  .fade-up-4 { animation-delay: 0.4s; }
+  .fade-up-5 { animation-delay: 0.5s; }
+
+  /* ── Mobile ───────────────────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    nav { display: none; }
+    header { padding: 0 20px; }
+    section { padding: 60px 20px; }
+    .hero { grid-template-columns: 1fr; gap: 40px; }
+    .hero-heading { font-size: 56px; }
+    .hero-right { display: none; }
+    .bento-grid { grid-template-columns: 1fr; }
+    .problem-grid { grid-template-columns: 1fr; }
+    .cost-grid { grid-template-columns: 1fr; }
+    .savings-row { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .commands-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .footer-nav { flex-wrap: wrap; gap: 16px; }
+    .section-title { font-size: 36px; }
+    .cta-title { font-size: 36px; }
+    .cost-big { font-size: 40px; }
+    .cta-section { padding: 40px 24px; }
+    .l-corner { display: none; }
+    pre { font-size: 11px; padding: 14px 16px; overflow-x: auto; }
+    .demo-wrapper { border-radius: 0; }
+    .video-chrome { border-radius: 0; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-heading { font-size: 38px; }
+    .section-title { font-size: 28px; }
+    .cta-title { font-size: 28px; }
+    .hero-metrics { font-size: 12px; }
+    .hero-buttons { flex-direction: column; align-items: flex-start; }
+    .hero-buttons .btn { width: 100%; justify-content: center; }
+    .savings-amount { font-size: 28px; }
+    .cost-big { font-size: 32px; }
+    .savings-cell { padding: 20px; }
+    .cost-col { padding: 20px; }
+    section { padding: 48px 16px; }
+    .badge { font-size: 8px; }
+    .bento-cell { padding: 20px; }
+    .pricing-card { padding: 24px; }
+    .commands-group { padding: 16px; }
+  }
+
+  /* ── Utility ──────────────────────────────────────────────────────────── */
+  .full-border { border: 1px solid var(--border); }
+  .opacity-50 { opacity: 0.5; }
+  .mt-8 { margin-top: 8px; }
+  .mt-16 { margin-top: 16px; }
+  .gap-8 { gap: 8px; }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────────────────────────────────────── -->
+<header>
+  <a href="#" class="header-logo" aria-label="Kodara — Memory for AI Development">
+    <div class="logo-box"><span>K</span></div>
+    <span class="logo-name">Kodara</span>
+  </a>
+  <nav>
+    <a href="#features">Features</a>
+    <a href="#numbers">Numbers</a>
+    <a href="#commands">Commands</a>
+    <a href="#pricing">Pricing</a>
+    <a href="docs.html">Docs</a>
+  </nav>
+  <div class="header-actions">
+    <a href="https://tally.so/r/5BkybP" target="_blank" rel="noopener noreferrer" class="btn btn-solid" style="height:36px;padding:0 14px;font-size:10px;">Get Started</a>
+  </div>
+</header>
+
+<!-- ── HERO ────────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="badge fade-up fade-up-1">
+      <div class="dot mint"></div>
+      <span>Now Available — v0.2.0</span>
+    </div>
+    <h1 class="hero-heading fade-up fade-up-2">Your AI re-reads<br>everything. Every time.</h1>
+    <div class="hero-desc-wrapper fade-up fade-up-3">
+      <div class="hero-desc-line"></div>
+      <p class="hero-desc">AI keeps re-reading your entire codebase on every query. Kodara makes it remember — giving your AI surgical context instead of a firehose.</p>
+    </div>
+    <p class="hero-metric fade-up fade-up-4">94% fewer tokens &nbsp;·&nbsp; Same answers &nbsp;·&nbsp; Any AI tool</p>
+    <p class="fade-up fade-up-4" style="font-family:var(--font-mono);font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--forest);opacity:0.55;margin-top:-8px;margin-bottom:0;">The quality isn't in the model. It's in the context. &nbsp;·&nbsp; Senior engineer knowledge. Free model. One prompt.</p>
+    <div class="hero-actions fade-up fade-up-5">
+      <button class="btn btn-solid" id="pip-copy-btn" aria-label="Copy pip install kodara to clipboard">pip install kodara</button>
+      <a href="#features" class="btn btn-outline">See how it works</a>
+    </div>
+  </div>
+
+  <div class="mockup-card fade-up fade-up-3" style="margin-top:8px;">
+    <div class="mockup-card-header">
+      <span class="mono">Kodara / Context Engine</span>
+      <span class="mono opacity-50">v0.2.0</span>
+    </div>
+    <div class="mockup-card-body">
+      <!-- Circle graphic -->
+      <div class="circle-graphic" style="display:flex;align-items:center;justify-content:center;position:relative;width:100%;height:110px;">
+        <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="55" cy="55" r="48" stroke="#1A3C2B" stroke-width="0.5" stroke-dasharray="4 4" opacity="0.4"/>
+          <circle cx="55" cy="55" r="32" stroke="#1A3C2B" stroke-width="0.5" stroke-dasharray="4 4" opacity="0.25"/>
+          <circle cx="55" cy="55" r="16" stroke="#1A3C2B" stroke-width="0.5" opacity="0.2"/>
+          <!-- Accent dots on orbits -->
+          <rect x="97" y="51" width="8" height="8" fill="#9EFFBF"/>
+          <rect x="30" y="4" width="8" height="8" fill="#F4D35E"/>
+          <rect x="7" y="70" width="8" height="8" fill="#FF8C69"/>
+          <rect x="75" y="95" width="8" height="8" fill="#9EFFBF"/>
+          <!-- Center dot -->
+          <rect x="51" y="51" width="8" height="8" fill="#1A3C2B"/>
+        </svg>
+        <div style="position:absolute;font-family:var(--font-mono);font-size:9px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.4;text-align:center;top:50%;left:50%;transform:translate(-50%,-50%);width:60px;line-height:1.4;">Context<br>Engine</div>
+      </div>
+
+      <!-- Query box -->
+      <div class="mockup-box">
+        <div class="mockup-box-label">Query</div>
+        <div class="mockup-code">kodara ask "How does auth work?"</div>
+      </div>
+
+      <!-- Output box -->
+      <div class="mockup-box">
+        <div class="mockup-box-label">Context Result — 3 modules / 1,840 tokens</div>
+        <div class="mockup-row">
+          <div class="dot mint" style="width:8px;height:8px;flex-shrink:0;background:var(--mint);"></div>
+          <span class="mockup-code">auth/middleware.py — AuthMiddleware, verify_token()</span>
+        </div>
+        <div class="mockup-row">
+          <div class="dot" style="width:8px;height:8px;flex-shrink:0;background:var(--gold);"></div>
+          <span class="mockup-code">auth/jwt_service.py — JWTService, decode()</span>
+        </div>
+        <div class="mockup-row">
+          <div class="dot" style="width:8px;height:8px;flex-shrink:0;background:var(--coral);"></div>
+          <span class="mockup-code">models/user.py — User, UserSession</span>
+        </div>
+      </div>
+
+      <!-- Bottom status -->
+      <div class="badge" style="align-self:flex-start;">
+        <div class="dot mint"></div>
+        <span>94.2% Reduction vs Full Read</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DEMO VIDEO ─────────────────────────────────────────────────────────── -->
+<section style="padding:0 32px 64px;max-width:1280px;margin:0 auto;">
+  <div style="border:1px solid var(--border);background:var(--forest);overflow:hidden;">
+    <!-- Browser chrome -->
+    <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:rgba(0,0,0,0.3);border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div style="width:10px;height:10px;background:#FF5F57;border-radius:0;"></div>
+      <div style="width:10px;height:10px;background:#FEBC2E;border-radius:0;"></div>
+      <div style="width:10px;height:10px;background:#28C840;border-radius:0;"></div>
+      <div style="flex:1;display:flex;justify-content:center;">
+        <div style="font-family:var(--font-mono);font-size:9px;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.25);">Kodara — Flask Demo · 83 files · 97% reduction</div>
+      </div>
+    </div>
+    <!-- Video -->
+    <video
+      src="demo.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+      aria-label="Kodara demo: kodara ask command returning 3 relevant modules from an 83-file codebase with 94% token reduction"
+      style="width:100%;display:block;"
+    ></video>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ── PROBLEM ─────────────────────────────────────────────────────────────── -->
+<section id="problem">
+  <div class="section-header">
+    <span class="section-index">00 / Problem</span>
+    <h2 class="section-title">The Problem with<br>AI Coding Today</h2>
+  </div>
+  <div class="problem-grid">
+    <div class="problem-col">
+      <div class="problem-col-title">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:8px;height:8px;background:var(--coral);flex-shrink:0;"></div>
+          Every query re-reads everything
+        </div>
+      </div>
+      <div class="problem-items">
+        <div class="problem-item">
+          <div class="dot" style="width:8px;height:8px;background:var(--coral);flex-shrink:0;margin-top:5px;"></div>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:13px;font-weight:600;margin-bottom:2px;">41,160 tokens per query</div>
+            <div style="font-size:13px;opacity:0.65;">AI reads all 44 files → $0.62 per query</div>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="dot" style="width:8px;height:8px;background:var(--coral);flex-shrink:0;margin-top:5px;"></div>
+          <div>
+            <div style="font-size:13px;opacity:0.65;">No memory between sessions — starts fresh every time</div>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="dot" style="width:8px;height:8px;background:var(--coral);flex-shrink:0;margin-top:5px;"></div>
+          <div>
+            <div style="font-size:13px;opacity:0.65;">Breaks existing architecture patterns without knowing them</div>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="dot" style="width:8px;height:8px;background:var(--coral);flex-shrink:0;margin-top:5px;"></div>
+          <div>
+            <div style="font-size:13px;opacity:0.65;">Token costs multiply fast at team scale</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="problem-col" style="background:#f0f7f3;border-left:1px solid var(--border);">
+      <div class="problem-col-title">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>
+          With Kodara
+        </div>
+      </div>
+      <div class="problem-items">
+        <div class="problem-item">
+          <div class="dot" style="width:8px;height:8px;background:var(--mint);flex-shrink:0;margin-top:5px;"></div>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:13px;font-weight:600;margin-bottom:2px;">2,400 tokens per query</div>
+            <div style="font-size:13px;opacity:0.65;">Reads 2 relevant files → $0.04 per query</div>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="dot" style="width:8px;height:8px;background:var(--mint);flex-shrink:0;margin-top:5px;"></div>
+          <div>
+            <div style="font-size:13px;opacity:0.65;">Structured project memory that persists across sessions</div>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="dot" style="width:8px;height:8px;background:var(--mint);flex-shrink:0;margin-top:5px;"></div>
+          <div>
+            <div style="font-size:13px;opacity:0.65;">Architecture-aware context — AI understands your system</div>
+          </div>
+        </div>
+        <div class="problem-item">
+          <div class="dot" style="width:8px;height:8px;background:var(--mint);flex-shrink:0;margin-top:5px;"></div>
+          <div>
+            <div style="font-family:var(--font-mono);font-size:13px;font-weight:600;">94% cost reduction</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ── FEATURES BENTO ──────────────────────────────────────────────────────── -->
+<section id="features">
+  <div class="section-header">
+    <span class="section-index">01 / Features</span>
+    <h2 class="section-title">What Kodara does</h2>
+  </div>
+  <div class="bento-grid">
+    <!-- Cell 01 -->
+    <div class="bento-cell coral">
+      <div class="bento-index">01 / Context Engine</div>
+      <div class="bento-title">Surgical Context</div>
+      <p class="bento-desc">Finds the 2–8 most relevant files for any query using IDF-weighted semantic search + dependency graph expansion. No hallucinations from irrelevant context.</p>
+      <pre class="bento-code">kodara ask "How does payment work?"
+→ Found 6 modules / 1,840 tokens
+→ billing/processor.py   ★★★★★
+→ billing/stripe.py      ★★★★</pre>
+    </div>
+    <!-- Cell 02 -->
+    <div class="bento-cell mint">
+      <div class="bento-index">02 / Intelligence</div>
+      <div class="bento-title">Impact Analysis</div>
+      <p class="bento-desc">Know what breaks before you change anything. BFS traversal through the reverse dependency graph surfaces every affected module, ranked by risk.</p>
+      <pre class="bento-code">kodara impact auth/middleware.py
+Risk: HIGH
+Direct affected:    2 modules
+Indirect affected:  8 modules</pre>
+    </div>
+    <!-- Cell 03 -->
+    <div class="bento-cell gold">
+      <div class="bento-index">03 / Memory</div>
+      <div class="bento-title">Accumulated Memory</div>
+      <p class="bento-desc">Project memory that grows over time. Git history, developer annotations (the WHY layer), and architecture snapshots. Answers questions no file can.</p>
+      <pre class="bento-code">kodara note add auth/jwt.py \
+  "Using RS256 not HS256 — audit req"
+kodara snapshot → saved 2026-03-12</pre>
+    </div>
+    <!-- Cell 04 -->
+    <div class="bento-cell forest">
+      <div class="bento-index">04 / Onboarding</div>
+      <div class="bento-title">Instant Onboarding</div>
+      <p class="bento-desc">New developer? Kodara generates a reading guide based on dependency layers and git activity. From zero to productive in hours, not days.</p>
+      <pre class="bento-code">kodara onboard
+01 → main.py           (entry point)
+02 → api/server.py     (core)
+03 → auth/middleware.py (foundation)</pre>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ── COST COMPARISON ─────────────────────────────────────────────────────── -->
+<section id="numbers">
+  <div class="section-header">
+    <span class="section-index">02 / Numbers</span>
+    <h2 class="section-title">Real numbers.<br>Real project.</h2>
+  </div>
+  <p style="font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.45;margin-bottom:32px;margin-top:-24px;">Tested on 44-file Python codebase · GPT-4o $2.50/1M input tokens (2026 pricing)</p>
+
+  <div class="cost-grid">
+    <div class="cost-col">
+      <div class="cost-label">Without Kodara — 5 queries</div>
+      <div class="cost-big">$0.51</div>
+      <div class="cost-sub">205,800 tokens consumed</div>
+      <div class="cost-items">
+        <div class="cost-item"><div style="width:8px;height:8px;background:var(--coral);flex-shrink:0;"></div> AI reads all 44 files every time</div>
+        <div class="cost-item"><div style="width:8px;height:8px;background:var(--coral);flex-shrink:0;"></div> 41,160 tokens per query</div>
+        <div class="cost-item"><div style="width:8px;height:8px;background:var(--coral);flex-shrink:0;"></div> $0.10 per query</div>
+        <div class="cost-item"><div style="width:8px;height:8px;background:var(--coral);flex-shrink:0;"></div> No architectural awareness</div>
+      </div>
+    </div>
+    <div class="cost-col dark">
+      <div class="cost-label" style="color:rgba(255,255,255,0.5);">With Kodara — 5 queries</div>
+      <div class="cost-big green">$0.02</div>
+      <div class="cost-sub" style="color:rgba(255,255,255,0.5);">9,200 tokens consumed</div>
+      <div class="cost-items">
+        <div class="cost-item" style="color:rgba(255,255,255,0.85);"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div> Reads 2–3 most relevant files</div>
+        <div class="cost-item" style="color:rgba(255,255,255,0.85);"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div> 1,840 tokens per query avg</div>
+        <div class="cost-item" style="color:rgba(255,255,255,0.85);"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div> $0.005 per query</div>
+        <div class="cost-item" style="color:rgba(255,255,255,0.85);"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div><strong>94% reduction</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="border:1px solid var(--border);border-top:none;padding:20px 32px;display:flex;align-items:center;gap:16px;margin-bottom:32px;">
+    <span class="mono opacity-50">Total saved on 5 queries</span>
+    <span style="font-family:var(--font-display);font-size:28px;font-weight:700;letter-spacing:-0.03em;">$0.49</span>
+    <div class="badge"><div class="dot mint"></div><span>94% reduction</span></div>
+  </div>
+
+  <div style="font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.45;margin-bottom:16px;">Monthly savings per developer · GPT-4o API</div>
+  <div class="savings-row">
+    <div class="savings-cell">
+      <div class="savings-usage">Light — 20 queries/day</div>
+      <div class="savings-amount">$59</div>
+      <div class="savings-period">per month &nbsp;·&nbsp; $708/year</div>
+    </div>
+    <div class="savings-cell" style="--accent:var(--gold);">
+      <div class="savings-usage">Medium — 50 queries/day</div>
+      <div class="savings-amount">$147</div>
+      <div class="savings-period">per month &nbsp;·&nbsp; $1,764/year</div>
+    </div>
+    <div class="savings-cell">
+      <div class="savings-usage">Heavy — 100 queries/day</div>
+      <div class="savings-amount">$295</div>
+      <div class="savings-period">per month &nbsp;·&nbsp; $3,540/year</div>
+    </div>
+  </div>
+
+  <div class="roi-bar">
+    <div class="roi-text">
+      <strong>Kodara Pro costs $19/month.</strong> Medium API user saves $147/month on GPT-4o token costs alone.
+      Your return on investment: <strong>7.7× every month.</strong>
+    </div>
+    <div class="badge" style="flex-shrink:0;">
+      <div class="dot gold"></div>
+      <span>7.7× ROI</span>
+    </div>
+  </div>
+
+  <div class="savings-row" style="margin-top:1px;margin-bottom:0;">
+    <div class="savings-cell" style="--accent:var(--coral);">
+      <div class="savings-usage">Claude Opus · $5/1M</div>
+      <div class="savings-amount">15.5×</div>
+      <div class="savings-period">ROI &nbsp;·&nbsp; $295/month saved · medium</div>
+    </div>
+    <div class="savings-cell" style="--accent:var(--gold);">
+      <div class="savings-usage">Cursor Max Mode · $3/1M</div>
+      <div class="savings-amount">10×</div>
+      <div class="savings-period">ROI &nbsp;·&nbsp; $190/month saved · medium</div>
+    </div>
+    <div class="savings-cell" style="--accent:var(--mint);">
+      <div class="savings-usage">Team of 5 · GPT-4o</div>
+      <div class="savings-amount">$735</div>
+      <div class="savings-period">saved/month &nbsp;·&nbsp; medium usage</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ── COMMANDS ────────────────────────────────────────────────────────────── -->
+<section id="commands">
+  <div class="section-header">
+    <span class="section-index">03 / CLI</span>
+    <h2 class="section-title">Every command<br>you need</h2>
+  </div>
+  <div class="commands-grid">
+    <div class="commands-group">
+      <div class="commands-group-label">
+        <div style="display:flex;align-items:center;gap:8px;"><div style="width:8px;height:8px;background:var(--mint);"></div>Core</div>
+      </div>
+      <div class="command-item">
+        <div>
+          <div class="command-name">kodara init</div>
+          <div class="command-desc">Scan project, build memory</div>
+        </div>
+      </div>
+      <div class="command-item">
+        <div>
+          <div class="command-name">kodara ask "..."</div>
+          <div class="command-desc">Query project memory</div>
+        </div>
+      </div>
+      <div class="command-item">
+        <div>
+          <div class="command-name">kodara context</div>
+          <div class="command-desc">Generate ARCHITECTURE.md</div>
+        </div>
+      </div>
+      <div class="command-item">
+        <div>
+          <div class="command-name">kodara status</div>
+          <div class="command-desc">Index health & stats</div>
+        </div>
+      </div>
+    </div>
+    <div class="commands-group">
+      <div class="commands-group-label">
+        <div style="display:flex;align-items:center;gap:8px;"><div style="width:8px;height:8px;background:var(--coral);"></div>Intelligence</div>
+      </div>
+      <div class="command-item">
+        <div>
+          <div class="command-name">kodara impact &lt;file&gt;</div>
+          <div class="command-desc">What breaks if I change this?</div>
+        </div>
+      </div>
+      <div class="command-item">
+        <div>
+          <div class="command-name">kodara onboard</div>
+          <div class="command-desc">Reading guide for new devs</div>
+        </div>
+      </div>
+      <div class="command-item">
+        <div>
+          <div class="command-name">kodara review</div>
+          <div class="command-desc">Impact of uncommitted changes</div>
+        </div>
+      </div>
+      <div class="command-item">
+        <div>
+          <div class="command-name">kodara diff &lt;base&gt;</div>
+          <div class="command-desc">Changes vs branch or commit</div>
+        </div>
+      </div>
+    </div>
+    <div class="commands-group">
+      <div class="commands-group-label">
+        <div style="display:flex;align-items:center;gap:8px;"><div style="width:8px;height:8px;background:var(--gold);"></div>Memory</div>
+      </div>
+      <div class="command-item">
+        <div>
+          <div class="command-name">kodara history &lt;file&gt;</div>
+          <div class="command-desc">Git evolution & authors</div>
+        </div>
+      </div>
+      <div class="command-item">
+        <div>
+          <div class="command-name">kodara note add ...</div>
+          <div class="command-desc">Annotate files with WHY</div>
+        </div>
+      </div>
+      <div class="command-item">
+        <div>
+          <div class="command-name">kodara snapshot</div>
+          <div class="command-desc">Save memory state</div>
+        </div>
+      </div>
+      <div class="command-item">
+        <div>
+          <div class="command-name">kodara stats</div>
+          <div class="command-desc">Token savings report</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ── PRICING ─────────────────────────────────────────────────────────────── -->
+<section id="pricing">
+  <div class="section-header">
+    <span class="section-index">05 / Pricing</span>
+    <h2 class="section-title">Simple pricing.<br>Immediate ROI.</h2>
+  </div>
+  <div class="pricing-grid">
+    <!-- Free -->
+    <div class="pricing-card">
+      <div class="pricing-header">
+        <span class="pricing-name">Free</span>
+      </div>
+      <div>
+        <div class="pricing-price">$0</div>
+        <div class="pricing-period">forever</div>
+      </div>
+      <div class="pricing-divider"></div>
+      <div class="feature-list">
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Up to 400 files per project</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>All core commands</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Local storage only</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Unlimited queries</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Local snapshots</div>
+        <div class="pricing-divider" style="margin:4px 0;"></div>
+        <div class="feature-item" style="background:rgba(158,255,191,0.12);padding:8px;margin:-4px;">
+          <div style="width:8px;height:8px;background:var(--gold);flex-shrink:0;"></div>
+          <div>
+            <div style="font-size:13px;font-weight:600;">kodara stats — free bonus</div>
+            <div style="font-family:var(--font-mono);font-size:9px;opacity:0.6;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">See your exact token & money savings</div>
+          </div>
+        </div>
+      </div>
+      <a href="https://tally.so/r/5BkybP" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width:100%;justify-content:center;">Start Free</a>
+    </div>
+    <!-- Pro -->
+    <div class="pricing-card featured">
+      <div class="pricing-header">
+        <span class="pricing-name" style="color:rgba(255,255,255,0.5);">Pro</span>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <div class="badge" style="border-color:rgba(244,211,94,0.5);">
+            <div class="dot gold"></div>
+            <span style="color:var(--gold);">Most Popular</span>
+          </div>
+          <div class="badge" style="border-color:rgba(255,140,105,0.6);background:rgba(255,140,105,0.12);">
+            <div class="dot coral"></div>
+            <span style="color:var(--coral);">Soon</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="pricing-price">$19</div>
+        <div class="pricing-period">per month · 1 developer</div>
+      </div>
+      <div class="pricing-divider"></div>
+      <div class="feature-list">
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Everything in Free</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Unlimited project size</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Cloud backup of .kodara/</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Full snapshot history</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>ROI: saves $147–$295/month avg</div>
+        <div class="pricing-divider" style="margin:4px 0;"></div>
+        <div class="feature-item" style="background:rgba(158,255,191,0.08);padding:8px;margin:-4px;">
+          <div style="width:8px;height:8px;background:var(--gold);flex-shrink:0;"></div>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);">$20 plan performs like $100.</div>
+            <div style="font-family:var(--font-mono);font-size:9px;opacity:0.5;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;color:rgba(255,255,255,0.7);">Every month.</div>
+          </div>
+        </div>
+      </div>
+      <span class="btn" style="width:100%;justify-content:center;opacity:0.45;cursor:not-allowed;background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.2);">Coming Soon</span>
+    </div>
+    <!-- Team -->
+    <div class="pricing-card">
+      <div class="pricing-header">
+        <span class="pricing-name">Team</span>
+        <div class="badge" style="border-color:rgba(255,140,105,0.5);background:rgba(255,140,105,0.08);">
+          <div class="dot coral"></div>
+          <span style="color:var(--coral);">Soon</span>
+        </div>
+      </div>
+      <div>
+        <div class="pricing-price">$25</div>
+        <div class="pricing-period">per user / month · 3–20 devs</div>
+      </div>
+      <div class="pricing-divider"></div>
+      <div class="feature-list">
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Everything in Pro</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Shared memory & notes</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Web dashboard</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Team onboarding</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>10 devs → saves $6,385/month</div>
+      </div>
+      <span class="btn btn-outline" style="width:100%;justify-content:center;opacity:0.4;cursor:not-allowed;">Coming Soon</span>
+    </div>
+    <!-- Enterprise -->
+    <div class="pricing-card">
+      <div class="pricing-header">
+        <span class="pricing-name">Enterprise</span>
+        <div class="badge" style="border-color:rgba(255,140,105,0.5);background:rgba(255,140,105,0.08);">
+          <div class="dot coral"></div>
+          <span style="color:var(--coral);">Soon</span>
+        </div>
+      </div>
+      <div>
+        <div class="pricing-price" style="font-size:32px;padding-top:6px;">Custom</div>
+        <div class="pricing-period">annual contract</div>
+      </div>
+      <div class="pricing-divider"></div>
+      <div class="feature-list">
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Everything in Team</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>20+ developers</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>SSO / SAML</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>On-premise deployment</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>SLA + dedicated support</div>
+      </div>
+      <span class="btn btn-outline" style="width:100%;justify-content:center;opacity:0.4;cursor:not-allowed;">Coming Soon</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ── CTA ─────────────────────────────────────────────────────────────────── -->
+<section class="cta-section" id="cta">
+  <div class="cta-box">
+    <div class="corner-bl"></div>
+    <div class="corner-br"></div>
+    <div class="badge">
+      <div class="dot mint"></div>
+      <span>No API keys required</span>
+    </div>
+    <h2 class="cta-title">Start in<br>30 seconds.</h2>
+    <div class="cta-input-row">
+      <input class="cta-input" type="text" value="pip install kodara" readonly aria-label="pip install kodara — click to copy" id="cta-pip-input">
+      <a href="https://tally.so/r/5BkybP" target="_blank" rel="noopener noreferrer" class="btn btn-solid">Get Started Free</a>
+    </div>
+    <p class="cta-sub">No API keys · No configuration · Works with any AI tool</p>
+    <div class="cta-links">
+      <a href="#coming-soon">Documentation — coming soon</a>
+      <a href="#coming-soon">GitHub — coming soon</a>
+      <a href="https://tally.so/r/5BkybP" target="_blank" rel="noopener noreferrer">Join waitlist</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ──────────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-brand">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+      <div class="logo-box" style="width:24px;height:24px;">
+        <span style="font-size:10px;">K</span>
+      </div>
+      <span style="font-family:var(--font-display);font-size:14px;font-weight:700;letter-spacing:-0.02em;">Kodara</span>
+    </div>
+    <div style="font-family:var(--font-mono);font-size:9px;text-transform:uppercase;letter-spacing:0.12em;opacity:0.4;">Memory for AI Development · © 2026 Kodara</div>
+  </div>
+  <nav class="footer-nav">
+    <a href="#pricing">Pricing</a>
+    <a href="https://tally.so/r/5BkybP" target="_blank" rel="noopener noreferrer">Waitlist</a>
+  </nav>
+  <div class="footer-right">
+    <div class="footer-pip">pip install kodara</div>
+    <div class="badge">
+      <div class="dot mint"></div>
+      <span>All Systems Operational</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // pip copy — hero button
+  const pipBtn = document.getElementById('pip-copy-btn');
+  if (pipBtn) {
+    pipBtn.addEventListener('click', () => {
+      navigator.clipboard?.writeText('pip install kodara').catch(() => {});
+      pipBtn.textContent = 'Copied!';
+      pipBtn.setAttribute('aria-label', 'Copied to clipboard');
+      setTimeout(() => {
+        pipBtn.textContent = 'pip install kodara';
+        pipBtn.setAttribute('aria-label', 'Copy pip install kodara to clipboard');
+      }, 2000);
+    });
+  }
+
+  // pip copy — CTA input
+  const ctaInput = document.getElementById('cta-pip-input');
+  if (ctaInput) {
+    ctaInput.addEventListener('click', () => {
+      ctaInput.select();
+      navigator.clipboard?.writeText(ctaInput.value).catch(() => {});
+      ctaInput.style.background = '#f0fff6';
+      setTimeout(() => { ctaInput.style.background = 'transparent'; }, 600);
+    });
+  }
+
+  // Intersection observer for fade-in sections
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.bento-cell, .testimonial-card, .pricing-card, .savings-cell, .problem-col').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity 0.5s cubic-bezier(0.4,0,0.2,1), transform 0.5s cubic-bezier(0.4,0,0.2,1)';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
