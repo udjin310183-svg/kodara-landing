@@ -12,6 +12,9 @@ export default function Navbar() {
           <a href="#features" className="text-sm font-medium text-gray-600 hover:text-[#0a0a0a] transition-colors hidden sm:block">
             Features
           </a>
+          <a href="/docs" className="text-sm font-medium text-gray-600 hover:text-[#0a0a0a] transition-colors hidden sm:block">
+            Docs
+          </a>
           <a
             href="#cta"
             className="text-sm font-semibold bg-[#0a0a0a] text-white px-5 py-2.5 rounded-full hover:bg-gray-800 transition-colors"
