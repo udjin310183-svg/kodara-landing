@@ -1,0 +1,261 @@
+[
+  {
+    "command": "kodara init",
+    "group": "EVERYDAY",
+    "description": "Index your project and build architectural memory",
+    "example": "kodara init .",
+    "keywords": ["start", "setup", "index", "begin", "initialize", "first", "scan", "build"]
+  },
+  {
+    "command": "kodara ask",
+    "group": "EVERYDAY",
+    "description": "Ask a question and get minimal structured context about your codebase",
+    "example": "kodara ask \"How does authentication work?\"",
+    "keywords": ["question", "context", "query", "find", "relevant", "modules", "search", "understand"]
+  },
+  {
+    "command": "kodara status",
+    "group": "EVERYDAY",
+    "description": "Show index status — whether the project is indexed and when it was last updated",
+    "example": "kodara status",
+    "keywords": ["index", "status", "is indexed", "info", "check", "state", "current"]
+  },
+  {
+    "command": "kodara watch",
+    "group": "EVERYDAY",
+    "description": "Auto-update index when files change — live reload for your memory layer",
+    "example": "kodara watch .",
+    "keywords": ["auto", "update", "live", "reload", "changes", "monitor", "daemon", "background"]
+  },
+  {
+    "command": "kodara stats",
+    "group": "EVERYDAY",
+    "description": "Show token savings and cost reduction metrics for your project",
+    "example": "kodara stats",
+    "keywords": ["tokens", "saved", "money", "cost", "savings", "metrics", "usage", "reduction"]
+  },
+  {
+    "command": "kodara history",
+    "group": "EVERYDAY",
+    "description": "View git commit history for a file — who changed it and when",
+    "example": "kodara history src/auth.py",
+    "keywords": ["git", "commits", "who", "changed", "file", "log", "blame", "timeline"]
+  },
+  {
+    "command": "kodara note",
+    "group": "EVERYDAY",
+    "description": "Add a persistent annotation or comment to a file in memory",
+    "example": "kodara note src/auth.py \"Legacy code — refactor soon\"",
+    "keywords": ["annotate", "comment", "file", "note", "label", "mark", "tag", "document"]
+  },
+  {
+    "command": "kodara impact",
+    "group": "ARCHITECTURE",
+    "description": "Show what breaks if you change a file — blast radius and dependency chain",
+    "example": "kodara impact src/auth.py",
+    "keywords": ["what breaks", "change", "blast radius", "dependencies", "risk", "ripple", "affect", "downstream"]
+  },
+  {
+    "command": "kodara context",
+    "group": "ARCHITECTURE",
+    "description": "Generate an ARCHITECTURE.md documentation file from your project memory",
+    "example": "kodara context --output ARCHITECTURE.md",
+    "keywords": ["architecture", "documentation", "ARCHITECTURE.md", "generate", "docs", "overview", "map"]
+  },
+  {
+    "command": "kodara review",
+    "group": "ARCHITECTURE",
+    "description": "Review uncommitted changes and staged diffs with architectural context",
+    "example": "kodara review",
+    "keywords": ["uncommitted", "changes", "diff", "staged", "pre-commit", "pending", "review", "before commit"]
+  },
+  {
+    "command": "kodara diff",
+    "group": "ARCHITECTURE",
+    "description": "Compare two branches or commits and analyze architectural differences",
+    "example": "kodara diff main feature/auth",
+    "keywords": ["compare", "branch", "commit", "changes", "delta", "difference", "versus", "vs"]
+  },
+  {
+    "command": "kodara onboard",
+    "group": "ARCHITECTURE",
+    "description": "Generate a new developer reading guide to understand the codebase quickly",
+    "example": "kodara onboard",
+    "keywords": ["new", "developer", "reading", "guide", "understand", "codebase", "intro", "orientation", "junior", "onboarding"]
+  },
+  {
+    "command": "kodara snapshot",
+    "group": "ARCHITECTURE",
+    "description": "Save the current architecture state as a named snapshot for future comparison",
+    "example": "kodara snapshot before-refactor",
+    "keywords": ["save", "state", "backup", "moment", "checkpoint", "record", "freeze", "point-in-time"]
+  },
+  {
+    "command": "kodara why",
+    "group": "ARCHITECTURE",
+    "description": "Explain why a file exists — its purpose and role in the overall architecture",
+    "example": "kodara why src/middleware/cors.py",
+    "keywords": ["why", "exists", "purpose", "file", "explanation", "role", "reason", "what does"]
+  },
+  {
+    "command": "kodara bus-factor",
+    "group": "ARCHITECTURE",
+    "description": "Identify files with a single person dependency — bus factor risk analysis",
+    "example": "kodara bus-factor",
+    "keywords": ["risk", "single", "person", "knowledge", "dependency", "bus factor", "owner", "bottleneck", "key person"]
+  },
+  {
+    "command": "kodara debt",
+    "group": "ARCHITECTURE",
+    "description": "Show a technical debt heatmap — identify dangerous and complex files",
+    "example": "kodara debt",
+    "keywords": ["technical", "debt", "heatmap", "dangerous", "files", "complexity", "smell", "refactor", "legacy"]
+  },
+  {
+    "command": "kodara arch-init",
+    "group": "ARCHITECTURE",
+    "description": "Auto-detect architectural layers and generate an architecture config file",
+    "example": "kodara arch-init",
+    "keywords": ["detect", "layers", "architecture", "config", "setup", "initialize", "boundaries", "rules"]
+  },
+  {
+    "command": "kodara check-architecture",
+    "group": "ARCHITECTURE",
+    "description": "Validate architecture rules and show layer violations",
+    "example": "kodara check-architecture",
+    "keywords": ["validate", "rules", "violations", "layers", "enforce", "check", "lint", "boundaries", "structure"]
+  },
+  {
+    "command": "kodara dna",
+    "group": "ARCHITECTURE",
+    "description": "Generate a fingerprint of your architecture pattern — identify your codebase DNA",
+    "example": "kodara dna",
+    "keywords": ["fingerprint", "architecture", "pattern", "identify", "signature", "style", "profile", "type"]
+  },
+  {
+    "command": "kodara evolve",
+    "group": "ARCHITECTURE",
+    "description": "Track how your architecture DNA has changed over time across commits",
+    "example": "kodara evolve",
+    "keywords": ["history", "dna", "changes", "over time", "evolution", "drift", "timeline", "trend"]
+  },
+  {
+    "command": "kodara compare",
+    "group": "ARCHITECTURE",
+    "description": "Compare the architecture of two different projects side by side",
+    "example": "kodara compare ./project-a ./project-b",
+    "keywords": ["compare", "two", "projects", "architectures", "side by side", "versus", "difference"]
+  },
+  {
+    "command": "kodara heatmap",
+    "group": "ARCHITECTURE",
+    "description": "Show responsibility heatmap — who owns what critical files",
+    "example": "kodara heatmap",
+    "keywords": ["responsibility", "who", "owns", "critical", "heatmap", "ownership", "author", "contribution"]
+  },
+  {
+    "command": "kodara simulate-change",
+    "group": "ARCHITECTURE",
+    "description": "Estimate cost and risk of a proposed change — hours, affected modules",
+    "example": "kodara simulate-change src/auth.py",
+    "keywords": ["cost", "risk", "change", "estimate", "hours", "simulate", "what if", "impact", "predict"]
+  },
+  {
+    "command": "kodara drift",
+    "group": "ARCHITECTURE",
+    "description": "Detect architectural drift — alert when the codebase diverges from expected patterns",
+    "example": "kodara drift",
+    "keywords": ["drift", "alerts", "changes", "architectural", "diverge", "detect", "monitor", "deviation"]
+  },
+  {
+    "command": "kodara clone-pattern",
+    "group": "ARCHITECTURE",
+    "description": "Copy an architecture structure or pattern to scaffold a new project",
+    "example": "kodara clone-pattern ./existing ./new-project",
+    "keywords": ["copy", "architecture", "structure", "new", "project", "scaffold", "template", "replicate"]
+  },
+  {
+    "command": "kodara ci-check",
+    "group": "CI/CD",
+    "description": "Run architecture checks in CI — exit with failure on violations",
+    "example": "kodara ci-check",
+    "keywords": ["CI", "CD", "exit", "fail", "violations", "pipeline", "continuous", "integration", "build", "automation"]
+  },
+  {
+    "command": "kodara init-ci",
+    "group": "CI/CD",
+    "description": "Generate a GitHub Actions workflow file for automated architecture checks",
+    "example": "kodara init-ci",
+    "keywords": ["github", "actions", "workflow", "CI", "setup", "automate", "yaml", "pipeline", "devops"]
+  },
+  {
+    "command": "kodara install-hook",
+    "group": "CI/CD",
+    "description": "Install a git pre-commit hook to auto-review before every commit",
+    "example": "kodara install-hook",
+    "keywords": ["git", "hook", "auto", "commit", "pre-commit", "install", "enforce", "trigger"]
+  },
+  {
+    "command": "kodara uninstall-hook",
+    "group": "CI/CD",
+    "description": "Remove the git pre-commit hook installed by Kodara",
+    "example": "kodara uninstall-hook",
+    "keywords": ["git", "hook", "remove", "uninstall", "disable", "pre-commit", "clean"]
+  },
+  {
+    "command": "kodara mcp",
+    "group": "PRO",
+    "description": "Start the MCP server for integration with Cursor, Claude, and other AI tools",
+    "example": "kodara mcp",
+    "keywords": ["MCP", "server", "Cursor", "Claude", "integration", "AI tools", "protocol", "connect"]
+  },
+  {
+    "command": "kodara scan",
+    "group": "PRO",
+    "description": "Analyze a remote GitHub repository by URL — no local clone required",
+    "example": "kodara scan https://github.com/org/repo",
+    "keywords": ["remote", "github", "repo", "url", "analyze", "external", "online", "cloud", "public"]
+  },
+  {
+    "command": "kodara backup",
+    "group": "PRO",
+    "description": "Backup your project memory index to the cloud",
+    "example": "kodara backup",
+    "keywords": ["cloud", "backup", "sync", "save", "upload", "store", "persist"]
+  },
+  {
+    "command": "kodara restore",
+    "group": "PRO",
+    "description": "Restore a project memory index from cloud backup",
+    "example": "kodara restore",
+    "keywords": ["restore", "cloud", "backup", "sync", "download", "recover", "pull"]
+  },
+  {
+    "command": "kodara login",
+    "group": "PRO",
+    "description": "Log in to your Kodara account to access cloud features",
+    "example": "kodara login",
+    "keywords": ["auth", "account", "cloud", "login", "sign in", "authenticate", "credentials"]
+  },
+  {
+    "command": "kodara logout",
+    "group": "PRO",
+    "description": "Log out of your Kodara account",
+    "example": "kodara logout",
+    "keywords": ["auth", "account", "logout", "sign out", "disconnect", "session"]
+  },
+  {
+    "command": "kodara repos",
+    "group": "PRO",
+    "description": "List and manage all indexed projects — clean stale entries",
+    "example": "kodara repos",
+    "keywords": ["list", "clean", "indexed", "projects", "manage", "all", "overview", "repos"]
+  },
+  {
+    "command": "kodara serve",
+    "group": "PRO",
+    "description": "Start a local REST API server for programmatic access to your memory index",
+    "example": "kodara serve --port 8742",
+    "keywords": ["API", "server", "REST", "HTTP", "endpoint", "local", "programmatic", "integration"]
+  }
+]
