@@ -331,6 +331,25 @@
       <a href="#cmd-hook" class="sidebar-link">kodara install-hook</a>
     </div>
     <div class="sidebar-section">
+      <div class="sidebar-label">Developer Intelligence</div>
+      <a href="#cmd-why" class="sidebar-link">kodara why</a>
+      <a href="#cmd-simulate" class="sidebar-link">kodara simulate-change</a>
+      <a href="#cmd-heatmap" class="sidebar-link">kodara heatmap</a>
+      <a href="#cmd-dna" class="sidebar-link">kodara dna</a>
+      <a href="#cmd-scan" class="sidebar-link">kodara scan</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Team Tools</div>
+      <a href="#cmd-bus-factor" class="sidebar-link">kodara bus-factor</a>
+      <a href="#cmd-debt" class="sidebar-link">kodara debt</a>
+      <a href="#cmd-arch-init" class="sidebar-link">kodara arch-init</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">MCP Integration</div>
+      <a href="#mcp" class="sidebar-link">Setup</a>
+      <a href="#mcp-tools" class="sidebar-link">Available tools</a>
+    </div>
+    <div class="sidebar-section">
       <div class="sidebar-label">Use Cases</div>
       <a href="#usecase-ask" class="sidebar-link">AI context workflow</a>
       <a href="#usecase-impact" class="sidebar-link">Before a refactor</a>
@@ -348,8 +367,8 @@
       <h1>Kodara Docs</h1>
       <p>Kodara builds architectural memory for your codebase — so your AI gets surgical context instead of re-reading everything every time.</p>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;">
-        <div class="badge"><div class="dot mint"></div><span>v0.2.2</span></div>
-        <div class="badge"><div class="dot mint"></div><span>Python 3.8+</span></div>
+        <div class="badge"><div class="dot mint"></div><span>v0.2.5</span></div>
+        <div class="badge"><div class="dot mint"></div><span>Python 3.10+</span></div>
         <div class="badge"><div class="dot mint"></div><span>Any AI tool</span></div>
       </div>
     </div>
@@ -433,9 +452,9 @@ Heavy (100 queries/day): save ~$260/month
     <div class="docs-section" id="prerequisites">
       <div class="section-label">Getting Started</div>
       <h2>Prerequisites</h2>
-      <p>Kodara requires Python 3.8 or higher. If you don't have Python installed, download it from <strong>python.org</strong> — pip is included automatically.</p>
+      <p>Kodara requires Python 3.10 or higher. If you don't have Python installed, download it from <strong>python.org</strong> — pip is included automatically.</p>
       <pre>python --version
-# Python 3.8.0 or higher required</pre>
+# Python 3.10.0 or higher required</pre>
       <div class="note">
         <strong>New to Python?</strong> Download it from python.org, run the installer, and make sure to check "Add Python to PATH" during installation.
       </div>
@@ -448,7 +467,7 @@ Heavy (100 queries/day): save ~$260/month
       <pre>pip install kodara</pre>
       <p>Verify the installation:</p>
       <pre>kodara --version
-# kodara, version 0.2.2</pre>
+# kodara, version 0.2.5</pre>
     </div>
 
     <!-- Quick Start -->
@@ -626,6 +645,290 @@ kodara snapshot list</pre>
 kodara uninstall-hook        # Remove</pre>
       <div class="note">
         <strong>Recommended.</strong> Install this once and never think about keeping the index up to date again.
+      </div>
+    </div>
+
+    <!-- Developer Intelligence -->
+    <div class="docs-section" id="cmd-why">
+      <div class="section-label">Developer Intelligence <span style="font-family:var(--font-mono);font-size:9px;background:var(--gold);color:var(--forest);padding:2px 7px;letter-spacing:0.08em;margin-left:6px;">PRO</span></div>
+      <h2>kodara why</h2>
+      <p>Explains <em>why</em> a file was written the way it was — combining git history, developer annotations, and optional AI analysis. No other tool answers the WHY question.</p>
+      <pre>kodara why auth/middleware.py</pre>
+      <p>Output:</p>
+      <pre>Why — auth/middleware.py
+
+  Git history:   42 commits · 8 authors
+  Last changed:  2 days ago by @alice
+  First commit:  2023-11-14 by @bob ("initial auth setup")
+  Hot spot:      top 5% most-changed files
+
+  Notes:
+    "Using RS256 not HS256 — security audit requirement (2024-02)"
+    "Removed session cookies — switched to stateless JWT"
+
+  AI: This file was rewritten after a security audit required
+  RS256 signing. It intercepts all API requests and validates
+  tokens before they reach route handlers.</pre>
+      <div class="note">
+        <strong>No login?</strong> Kodara shows git history + notes (heuristic). With <code>kodara login</code> the AI layer adds a human-readable explanation on top.
+      </div>
+    </div>
+
+    <div class="docs-section" id="cmd-simulate">
+      <h2>kodara simulate-change</h2>
+      <p>Before you touch a critical file — see the full cost. BFS graph traversal calculates affected modules, estimates downstream dev-hours, and surfaces the critical paths to fix first.</p>
+      <pre>kodara simulate-change auth/session.py
+kodara simulate-change auth/session.py --hours 6  # override avg hours/module</pre>
+      <p>Output:</p>
+      <pre>Simulate Change — auth/session.py
+
+  Direct dependents:    12 modules  (will break immediately)
+  Indirect dependents:  37 modules  (affected through the chain)
+  Downstream cost:      ~80 dev-hours
+  Formula:              49 modules x 1.8h avg per fix
+
+  Risk:                 CRITICAL
+
+  Critical paths (fix these first):
+    auth.session -> api.routes -> client_sdk
+    auth.session -> payment.processor -> billing
+
+  Top affected:
+    api/routes.py          (8 direct deps)
+    services/user.py       (depth 2)
+    payment/processor.py   (depth 2)</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-heatmap">
+      <h2>kodara heatmap</h2>
+      <p>Shows which files are the most dangerous to touch — ranked by change frequency × number of dependents. High change rate + many dependents = highest risk.</p>
+      <pre>kodara heatmap</pre>
+      <p>Output:</p>
+      <pre>Heatmap — my-project (83 files)
+
+  CRITICAL — change often + many dependents:
+    auth/middleware.py     commits: 42   deps: 23   ████████ HIGH
+    api/routes.py          commits: 38   deps: 18   ███████  HIGH
+    services/user.py       commits: 31   deps: 14   ██████   HIGH
+
+  WATCH — growing fast:
+    billing/processor.py   commits: 12   deps: 7    ████     MED
+    utils/validators.py    commits: 9    deps: 5    ███      MED
+
+  STABLE — low risk:
+    config/settings.py     commits: 3    deps: 2    █        LOW
+    utils/helpers.py       commits: 2    deps: 1    █        LOW</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-dna">
+      <h2>kodara dna</h2>
+      <p>Generates an architectural fingerprint of your project — auth patterns, routing style, DB access pattern, and similarity to known frameworks. Useful for code review, onboarding, and M&A due diligence.</p>
+      <pre>kodara dna</pre>
+      <p>Output:</p>
+      <pre>Project DNA — my-saas
+
+  Auth:       JWT + middleware  (Flask pattern)
+  Routing:    Decorator-based
+  DB:         Repository pattern  (Django-inspired)
+  Cache:      Redis via decorator
+  Testing:    pytest + fixtures
+  Queue:      Celery tasks detected
+
+  Similarity:
+    73%  FastAPI
+    21%  Flask
+     6%  unique
+
+  Maturity:   Production-ready
+  Patterns:   6 of 21 detected
+
+Run kodara learn to save this DNA to your library.
+Run kodara evolve to see how the DNA changed over time.</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-scan">
+      <h2>kodara scan</h2>
+      <p>Scans any public GitHub repository without installing anything on the target. Clones temporarily, builds memory, then deletes the clone. Results saved to <code>~/.kodara/scans/</code>.</p>
+      <pre>kodara scan github.com/tiangolo/fastapi
+kodara scan github.com/pallets/flask</pre>
+      <p>Output:</p>
+      <pre>Scanning github.com/tiangolo/fastapi...
+
+  Cloning...   done
+  Files:       142
+  Languages:   python
+  Edges:       387
+  Cleaning up: done
+
+  Hub modules:
+    fastapi/applications.py   (dependents: 34)
+    fastapi/routing.py        (dependents: 28)
+    fastapi/params.py         (dependents: 21)
+
+  Saved: ~/.kodara/scans/fastapi/
+
+Run: kodara ask "How does routing work?" --repo fastapi</pre>
+      <div class="note">
+        <strong>Use case:</strong> Scan 3 production repos, feed their <code>.kodara/</code> context to any free LLM. Ask it to build a project combining the best patterns from all three. No source code needed.
+      </div>
+    </div>
+
+    <!-- Team Tools -->
+    <div class="docs-section" id="cmd-bus-factor">
+      <div class="section-label">Team Tools <span style="font-family:var(--font-mono);font-size:9px;background:var(--coral);color:#fff;padding:2px 7px;letter-spacing:0.08em;margin-left:6px;">TEAM</span></div>
+      <h2>kodara bus-factor</h2>
+      <p>Finds files where knowledge is dangerously concentrated — one person leaves and the knowledge is gone. Based on git authorship analysis across the entire codebase.</p>
+      <pre>kodara bus-factor</pre>
+      <p>Output:</p>
+      <pre>Bus Factor Report — my-project
+
+  CRITICAL — sole author (bus factor: 1):
+    auth/session.py        only known by: @alice   commits: 42
+    payment/processor.py   only known by: @bob     commits: 31
+    infra/deploy.sh        only known by: @carol   commits: 18
+
+  WARNING — known by 2 people:
+    api/gateway.py         authors: @alice, @carol
+    services/billing.py    authors: @bob, @dave
+
+  HEALTHY:
+    utils/helpers.py       authors: 4 people
+    models/user.py         authors: 6 people
+
+  Overall bus factor: 3  (3 critical files, 3 sole authors)</pre>
+      <div class="note">
+        <strong>For managers:</strong> If any of the CRITICAL authors leaves, that knowledge is gone. Use this report to plan knowledge transfer before it becomes an incident.
+      </div>
+    </div>
+
+    <div class="docs-section" id="cmd-debt">
+      <h2>kodara debt</h2>
+      <p>Technical debt heatmap — files that change most often AND have the most dependents are your highest-risk debt. These are the places that are hardest to change and most likely to cause incidents.</p>
+      <pre>kodara debt</pre>
+      <p>Output:</p>
+      <pre>Technical Debt — my-project
+
+  HIGH RISK — change often + many dependents:
+    auth/middleware.py    changes: 42   deps: 23   debt: ████████
+    api/routes.py         changes: 38   deps: 18   debt: ███████
+    services/user.py      changes: 31   deps: 14   debt: ██████
+
+  ACCUMULATING — growing fast:
+    billing/processor.py  changes: 12   deps: 7    debt: ████
+    utils/validators.py   changes: 9    deps: 5    debt: ███
+
+  LOW — manageable:
+    config/settings.py    changes: 3    deps: 2    debt: █
+
+  Total debt score: 847
+  Recommendation: refactor auth/middleware.py first — highest ROI</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-arch-init">
+      <h2>kodara arch-init + check-architecture</h2>
+      <p>Define architectural rules once. Kodara enforces them on every commit — or in CI/CD. Prevents the slow drift where <code>api/</code> starts importing <code>repository/</code> directly, bypassing the service layer.</p>
+      <pre>kodara arch-init             # Auto-detect layers and generate config
+kodara check-architecture    # Validate current state against rules</pre>
+      <p><code>arch-init</code> output:</p>
+      <pre>Created .kodara/architecture.yml
+
+  Detected layers:
+    api:         api/, routes/
+    service:     services/
+    repository:  models/, db/
+    utils:       utils/, helpers/
+
+  Edit .kodara/architecture.yml to define allowed imports.
+  Then run: kodara check-architecture</pre>
+      <p>After editing <code>.kodara/architecture.yml</code>, run <code>check-architecture</code>:</p>
+      <pre>kodara check-architecture
+
+  Architecture Violations Detected (2)
+
+  api/user_routes.py
+    imports: db/session.py  (repository layer)
+    violation: api layer cannot import repository directly
+    expected: api -> service -> repository
+    fix: add services/user_service.py as wrapper
+
+  api/payment.py
+    imports: models/transaction.py  (repository layer)
+    violation: same as above
+
+  Run: kodara init-ci  to add this check to your CI/CD pipeline</pre>
+      <div class="note">
+        <strong>CI integration:</strong> Run <code>kodara init-ci</code> to generate a GitHub Actions workflow. Architecture violations block PRs automatically — no manual review needed.
+      </div>
+    </div>
+
+    <!-- MCP Integration -->
+    <div class="docs-section" id="mcp">
+      <div class="section-label">MCP Integration</div>
+      <h2>MCP — Model Context Protocol</h2>
+      <p>Kodara includes a built-in MCP server. Instead of copy-pasting context manually, your AI tool fetches it automatically on every query. Works with Claude Desktop, Cursor, Windsurf, VS Code, and any MCP-compatible tool.</p>
+      <div class="note">
+        <strong>PRO feature.</strong> MCP requires an active Kodara Pro subscription. Run <code>kodara login</code> to authenticate first.
+      </div>
+
+      <h3>Setup in one command</h3>
+      <pre>kodara mcp --setup</pre>
+      <p>Auto-configures Claude Desktop, Cursor, and VS Code simultaneously. No manual JSON editing required. Restart your AI tool after running this.</p>
+
+      <h3>Manual setup</h3>
+      <p>Add to your AI tool's MCP config file:</p>
+      <pre>{
+  "mcpServers": {
+    "kodara": {
+      "command": "kodara",
+      "args": ["mcp", "--path", "/absolute/path/to/your/project"]
+    }
+  }
+}</pre>
+      <p>Config file locations:</p>
+      <pre># Claude Desktop
+Windows: %APPDATA%\Claude\claude_desktop_config.json
+macOS:   ~/Library/Application Support/Claude/claude_desktop_config.json
+
+# Cursor
+~/.cursor/mcp.json
+
+# VS Code / Windsurf / Trae (same format)
+~/.vscode/mcp.json</pre>
+
+      <div class="note">
+        <strong>Important:</strong> Use the absolute path to your project in <code>--path</code>. Run <code>kodara init</code> in that project first.
+      </div>
+    </div>
+
+    <div class="docs-section" id="mcp-tools">
+      <h2>Available MCP Tools</h2>
+      <p>Once connected, your AI gains 5 tools it calls automatically when it needs codebase context:</p>
+      <div class="command-list">
+        <div class="command-row">
+          <div class="command-dot" style="background:var(--mint);"></div>
+          <div class="command-name">kodara_ask</div>
+          <div class="command-desc">Returns relevant modules for a natural language query — IDF search + dependency graph expansion. AI uses this to answer architecture questions.</div>
+        </div>
+        <div class="command-row">
+          <div class="command-dot" style="background:var(--mint);"></div>
+          <div class="command-name">kodara_impact</div>
+          <div class="command-desc">Shows which modules will break if a file changes. Risk-scored, depth-ranked by BFS traversal of the reverse dependency graph.</div>
+        </div>
+        <div class="command-row">
+          <div class="command-dot" style="background:var(--mint);"></div>
+          <div class="command-name">kodara_context</div>
+          <div class="command-desc">Returns the full architecture overview — hub modules, dependency map, layer structure, and Mermaid diagram.</div>
+        </div>
+        <div class="command-row">
+          <div class="command-dot" style="background:var(--mint);"></div>
+          <div class="command-name">kodara_search</div>
+          <div class="command-desc">Keyword search across all indexed modules and their summaries. Useful for finding implementations of specific concepts.</div>
+        </div>
+        <div class="command-row">
+          <div class="command-dot" style="background:var(--mint);"></div>
+          <div class="command-name">kodara_status</div>
+          <div class="command-desc">Index health — file count, last updated, graph edges, hub files. AI uses this to check if the index is fresh before querying.</div>
+        </div>
       </div>
     </div>
 

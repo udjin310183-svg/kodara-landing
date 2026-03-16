@@ -769,6 +769,112 @@
   .fade-up-4 { animation-delay: 0.4s; }
   .fade-up-5 { animation-delay: 0.5s; }
 
+  /* ── MCP Section ──────────────────────────────────────────────────────── */
+  .mcp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 1px;
+  }
+  .mcp-terminal {
+    background: var(--forest);
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .mcp-terminal-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--mint);
+    opacity: 0.6;
+  }
+  .mcp-terminal pre {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.7;
+  }
+  .mcp-terminal pre .hi { color: var(--mint); font-weight: 600; }
+  .mcp-terminal pre .dim { opacity: 0.45; }
+  .mcp-tools-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .mcp-tool {
+    background: var(--bg);
+    padding: 20px 24px;
+  }
+  .mcp-tool-name {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--forest);
+    margin-bottom: 6px;
+  }
+  .mcp-tool-desc {
+    font-size: 12px;
+    opacity: 0.55;
+    line-height: 1.5;
+  }
+  .mcp-setup {
+    background: var(--bg);
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
+  }
+  .mcp-setup-title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .mcp-setup-desc {
+    font-size: 14px;
+    opacity: 0.6;
+    line-height: 1.6;
+  }
+  .mcp-setup pre {
+    background: var(--forest);
+    color: var(--mint);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 14px 18px;
+    margin: 0;
+  }
+  .mcp-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .pricing-terminal {
+    background: rgba(26,60,43,0.06);
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--forest);
+    overflow: hidden;
+  }
+  .pricing-card.featured .pricing-terminal {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.7);
+  }
+
   /* ── Mobile ───────────────────────────────────────────────────────────── */
   @media (max-width: 900px) {
     nav { display: none; }
@@ -784,6 +890,8 @@
     .testimonials-grid { grid-template-columns: 1fr; }
     .pricing-grid { grid-template-columns: 1fr; }
     .commands-grid { grid-template-columns: 1fr; }
+    .mcp-grid { grid-template-columns: 1fr; }
+    .mcp-tools-row { grid-template-columns: 1fr 1fr; }
     footer { flex-direction: column; align-items: flex-start; gap: 16px; }
     .footer-nav { flex-wrap: wrap; gap: 16px; }
     .section-title { font-size: 36px; }
@@ -1266,6 +1374,87 @@ kodara snapshot → saved 2026-03-12</pre>
 
 <div class="section-divider"></div>
 
+<!-- ── MCP ───────────────────────────────────────────────────────────────── -->
+<section id="mcp">
+  <div class="section-header">
+    <span class="section-index">04 / MCP</span>
+    <h2 class="section-title">AI understands<br>your project. Always.</h2>
+  </div>
+
+  <div class="mcp-grid">
+    <!-- Before -->
+    <div class="mcp-terminal">
+      <div class="mcp-terminal-label">Without Kodara MCP</div>
+      <pre><span class="dim">User:</span>  How does the payment flow work?
+
+<span class="dim">Claude:</span> [reading 83 files... 41,160 tokens]
+
+        I'll analyze your codebase to understand...
+        <span class="dim">[repeating the same analysis every time]</span></pre>
+    </div>
+    <!-- After -->
+    <div class="mcp-terminal">
+      <div class="mcp-terminal-label">With Kodara MCP</div>
+      <pre><span class="dim">User:</span>  How does the payment flow work?
+
+<span class="dim">Claude:</span> <span class="hi">[calling kodara_ask("payment flow")]</span>
+        <span class="hi">→ 4 modules / 1,840 tokens</span>
+
+        billing/processor.py handles Stripe charges.
+        billing/webhook.py processes async confirmations...</pre>
+    </div>
+  </div>
+
+  <!-- Setup -->
+  <div class="mcp-grid" style="margin-top:1px;">
+    <div class="mcp-setup">
+      <div class="mcp-setup-title">One command.<br>Works everywhere.</div>
+      <p class="mcp-setup-desc">Auto-configures Claude Desktop, Cursor, and VS Code simultaneously. No JSON editing. Restart your AI tool and Kodara is active.</p>
+      <pre>kodara mcp --setup</pre>
+      <div class="mcp-badges">
+        <div class="badge"><div class="dot forest"></div><span>Claude Desktop</span></div>
+        <div class="badge"><div class="dot forest"></div><span>Cursor</span></div>
+        <div class="badge"><div class="dot forest"></div><span>VS Code</span></div>
+        <div class="badge"><div class="dot forest"></div><span>Windsurf</span></div>
+      </div>
+    </div>
+    <div class="mcp-terminal" style="justify-content:center;">
+      <div class="mcp-terminal-label">What your AI gains</div>
+      <pre><span class="hi">kodara_ask</span>       <span class="dim">— relevant modules for any query</span>
+<span class="hi">kodara_impact</span>    <span class="dim">— what breaks if file X changes</span>
+<span class="hi">kodara_context</span>   <span class="dim">— full architecture overview</span>
+<span class="hi">kodara_search</span>    <span class="dim">— keyword search across all modules</span>
+<span class="hi">kodara_status</span>    <span class="dim">— index freshness check</span></pre>
+    </div>
+  </div>
+
+  <!-- 5 tools -->
+  <div class="mcp-tools-row" style="margin-top:1px;">
+    <div class="mcp-tool">
+      <div class="mcp-tool-name">kodara_ask</div>
+      <div class="mcp-tool-desc">Returns 2–8 most relevant modules for any natural language query. AI calls this automatically instead of reading the whole codebase.</div>
+    </div>
+    <div class="mcp-tool">
+      <div class="mcp-tool-name">kodara_impact</div>
+      <div class="mcp-tool-desc">Shows which modules will break if a specific file changes. Risk-scored and depth-ranked.</div>
+    </div>
+    <div class="mcp-tool">
+      <div class="mcp-tool-name">kodara_context</div>
+      <div class="mcp-tool-desc">Returns the full architecture map — hub modules, dependency layers, and Mermaid diagram.</div>
+    </div>
+    <div class="mcp-tool">
+      <div class="mcp-tool-name">kodara_search</div>
+      <div class="mcp-tool-desc">Keyword search across all indexed modules and their summaries. Finds implementations by concept.</div>
+    </div>
+    <div class="mcp-tool">
+      <div class="mcp-tool-name">kodara_status</div>
+      <div class="mcp-tool-desc">Index health check. AI uses this to verify the memory is fresh before querying.</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
 <!-- ── PRICING ─────────────────────────────────────────────────────────────── -->
 <section id="pricing">
   <div class="section-header">
@@ -1284,20 +1473,20 @@ kodara snapshot → saved 2026-03-12</pre>
       </div>
       <div class="pricing-divider"></div>
       <div class="feature-list">
-        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Up to 200 files per project</div>
-        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>All core commands</div>
-        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Local storage only</div>
-        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Unlimited queries</div>
-        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Local snapshots</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>AI understands your project in seconds</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Annotate files with context for AI</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Point-in-time memory snapshots</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Up to 200 files · unlimited queries</div>
         <div class="pricing-divider" style="margin:4px 0;"></div>
         <div class="feature-item" style="background:rgba(158,255,191,0.12);padding:8px;margin:-4px;">
           <div style="width:8px;height:8px;background:var(--gold);flex-shrink:0;"></div>
           <div>
-            <div style="font-size:13px;font-weight:600;">kodara stats — free bonus</div>
-            <div style="font-family:var(--font-mono);font-size:9px;opacity:0.6;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">See your exact token & money savings</div>
+            <div style="font-size:13px;font-weight:600;">See your exact token & money savings</div>
+            <div style="font-family:var(--font-mono);font-size:9px;opacity:0.6;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;">kodara stats — free, always</div>
           </div>
         </div>
       </div>
+      <div class="pricing-terminal">Today &nbsp;&nbsp; queries: 12 &nbsp; saved: $7.31<br>All time &nbsp; tokens: 2.3M &nbsp; saved: $35</div>
       <a href="https://tally.so/r/5BkybP" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="width:100%;justify-content:center;">Start Free</a>
     </div>
     <!-- Pro -->
@@ -1322,19 +1511,20 @@ kodara snapshot → saved 2026-03-12</pre>
       <div class="pricing-divider"></div>
       <div class="feature-list">
         <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Everything in Free</div>
-        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Unlimited project size</div>
-        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Cloud backup of .kodara/</div>
-        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Full snapshot history</div>
-        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>ROI: saves $147–$295/month avg</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Know what will break before you change it</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>MCP: AI gets context automatically</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Cloud backup — memory survives machines</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Codebase fingerprint & drift detection</div>
         <div class="pricing-divider" style="margin:4px 0;"></div>
         <div class="feature-item" style="background:rgba(158,255,191,0.08);padding:8px;margin:-4px;">
           <div style="width:8px;height:8px;background:var(--gold);flex-shrink:0;"></div>
           <div>
-            <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);">$20 plan performs like $100.</div>
-            <div style="font-family:var(--font-mono);font-size:9px;opacity:0.5;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;color:rgba(255,255,255,0.7);">Every month.</div>
+            <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);">Saves $147–$295/month on average.</div>
+            <div style="font-family:var(--font-mono);font-size:9px;opacity:0.5;text-transform:uppercase;letter-spacing:0.08em;margin-top:2px;color:rgba(255,255,255,0.7);">ROI: 8–15x. Every month.</div>
           </div>
         </div>
       </div>
+      <div class="pricing-terminal">simulate-change auth/session.py<br>Affected: 49 modules &nbsp; Cost: ~80h<br>Risk: CRITICAL &nbsp;&nbsp;&nbsp;&nbsp; Paths: 3</div>
       <span class="btn" style="width:100%;justify-content:center;opacity:0.45;cursor:not-allowed;background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.2);">Coming Soon</span>
     </div>
     <!-- Team -->
@@ -1353,11 +1543,13 @@ kodara snapshot → saved 2026-03-12</pre>
       <div class="pricing-divider"></div>
       <div class="feature-list">
         <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Everything in Pro</div>
-        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Shared memory & notes</div>
-        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Web dashboard</div>
-        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Team onboarding</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>One indexes — whole team works with shared memory</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>New dev onboards in minutes, not days</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Bus factor — see who knows what</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Architecture guard enforces layer rules</div>
         <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>10 devs → saves $6,385/month</div>
       </div>
+      <div class="pricing-terminal">bus-factor: 3 critical files<br>auth/session.py &nbsp; sole: @alice<br>payment/core.py &nbsp; sole: @bob</div>
       <span class="btn btn-outline" style="width:100%;justify-content:center;opacity:0.4;cursor:not-allowed;">Coming Soon</span>
     </div>
     <!-- Enterprise -->
@@ -1376,8 +1568,8 @@ kodara snapshot → saved 2026-03-12</pre>
       <div class="pricing-divider"></div>
       <div class="feature-list">
         <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>Everything in Team</div>
-        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>20+ developers</div>
-        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>SSO / SAML</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>CI/CD blocks architecture violations automatically</div>
+        <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>20+ developers, SSO / SAML</div>
         <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>On-premise deployment</div>
         <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>SLA + dedicated support</div>
       </div>
