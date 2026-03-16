@@ -336,7 +336,19 @@
       <a href="#cmd-simulate" class="sidebar-link">kodara simulate-change</a>
       <a href="#cmd-heatmap" class="sidebar-link">kodara heatmap</a>
       <a href="#cmd-dna" class="sidebar-link">kodara dna</a>
+      <a href="#cmd-learn" class="sidebar-link">kodara learn</a>
+      <a href="#cmd-evolve" class="sidebar-link">kodara evolve</a>
+      <a href="#cmd-compare" class="sidebar-link">kodara compare</a>
+      <a href="#cmd-drift" class="sidebar-link">kodara drift</a>
+      <a href="#cmd-clone-pattern" class="sidebar-link">kodara clone-pattern</a>
       <a href="#cmd-scan" class="sidebar-link">kodara scan</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Cloud &amp; Account</div>
+      <a href="#cmd-login" class="sidebar-link">kodara login</a>
+      <a href="#cmd-backup" class="sidebar-link">kodara backup</a>
+      <a href="#cmd-restore" class="sidebar-link">kodara restore</a>
+      <a href="#cmd-backups" class="sidebar-link">kodara backups</a>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Team Tools</div>
@@ -367,7 +379,7 @@
       <h1>Kodara Docs</h1>
       <p>Kodara builds architectural memory for your codebase — so your AI gets surgical context instead of re-reading everything every time.</p>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;">
-        <div class="badge"><div class="dot mint"></div><span>v0.2.5</span></div>
+        <div class="badge"><div class="dot mint"></div><span>v0.3.1</span></div>
         <div class="badge"><div class="dot mint"></div><span>Python 3.10+</span></div>
         <div class="badge"><div class="dot mint"></div><span>Any AI tool</span></div>
       </div>
@@ -467,7 +479,7 @@ Heavy (100 queries/day): save ~$260/month
       <pre>pip install kodara</pre>
       <p>Verify the installation:</p>
       <pre>kodara --version
-# kodara, version 0.2.5</pre>
+# kodara, version 0.3.1</pre>
     </div>
 
     <!-- Quick Start -->
@@ -603,9 +615,11 @@ kodara diff HEAD~3</pre>
       <div class="section-label">Memory Commands</div>
       <h2>kodara note</h2>
       <p>Annotate files with the WHY — decisions, context, warnings that code alone can't explain.</p>
-      <pre>kodara note add auth/jwt.py "Using RS256 not HS256 — security audit requirement"
-kodara note list
-kodara note list auth/jwt.py</pre>
+      <pre>kodara note auth/jwt.py "Using RS256 not HS256 — security audit requirement"
+kodara note auth/jwt.py          # show notes for this file
+kodara note --list               # list all notes across all files
+kodara note --search "security"  # search notes by text
+kodara note auth/jwt.py --delete 0  # delete newest note</pre>
     </div>
 
     <div class="docs-section" id="cmd-snapshot">
@@ -773,6 +787,146 @@ Run: kodara ask "How does routing work?" --repo fastapi</pre>
       </div>
     </div>
 
+    <div class="docs-section" id="cmd-learn">
+      <h2>kodara learn</h2>
+      <p>Save the current project DNA fingerprint to <code>.kodara/dna.json</code>. Run after <code>kodara dna</code> to persist the fingerprint for future comparisons with <code>evolve</code> and <code>compare</code>.</p>
+      <pre>kodara learn</pre>
+      <p>Output:</p>
+      <pre>DNA saved: .kodara/dna.json
+
+  Project:  my-saas
+  Patterns: 6 of 21 detected
+  Hubs:     api/routes.py, auth/middleware.py
+  Score:    74
+
+Run kodara evolve to track how the DNA changes over time.</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-evolve">
+      <h2>kodara evolve</h2>
+      <p>Show how the project architecture changed over time — compares the current state against saved snapshots. Requires at least one snapshot (<code>kodara snapshot</code>) and a saved DNA (<code>kodara learn</code>).</p>
+      <pre>kodara evolve</pre>
+      <p>Output:</p>
+      <pre>DNA Evolution — my-saas
+
+  snapshot-2024-01-15
+    Added:    Queue pattern (Celery tasks detected)
+    Removed:  —
+    Files:    +12   Complexity: +8
+
+  snapshot-2024-03-01
+    Added:    Cache pattern (Redis detected)
+    Removed:  —
+    Files:    +5    Complexity: +3
+
+  2 snapshots tracked. Architecture is growing steadily.</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-compare">
+      <h2>kodara compare</h2>
+      <p>Compare the architectural DNA of two projects side by side. Both must be initialized with <code>kodara init</code>. Useful for auditing consistency across microservices or evaluating an acquired codebase.</p>
+      <pre>kodara compare ./my-api ./my-frontend
+kodara compare /path/to/service-a /path/to/service-b</pre>
+      <p>Output:</p>
+      <pre>DNA Comparison
+
+  Project A:  my-api     (84 files, complexity: 74)
+  Project B:  my-frontend (61 files, complexity: 41)
+
+  Common patterns:    JWT auth, Repository pattern
+  Only in my-api:     Queue (Celery), Cache (Redis)
+  Only in my-frontend: Component pattern, State management
+
+  Layer structure:
+    my-api:      api -> service -> repository
+    my-frontend: components -> hooks -> store</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-drift">
+      <h2>kodara drift</h2>
+      <p>Detect architectural drift since the last snapshot — new hub modules that appeared, files that gained unexpected dependencies, or layers that shifted. Catches gradual decay before it becomes a problem.</p>
+      <pre>kodara drift</pre>
+      <p>Output:</p>
+      <pre>Drift Report — my-saas
+
+  [HIGH]  New hub detected: utils/helpers.py (14 new dependents)
+          Utility file is becoming a god module — consider splitting
+
+  [MED]   api/routes.py gained 8 new direct imports since last snapshot
+          Review for layer violations
+
+  [INFO]  12 new files added since last snapshot
+
+No drift? Run: kodara snapshot  to save current state as baseline.</pre>
+    </div>
+
+    <div class="docs-section" id="cmd-clone-pattern">
+      <h2>kodara clone-pattern</h2>
+      <p>Clone the architectural structure of any GitHub repository into a new directory — folders, file layout, and naming conventions, without any source code. Start a new project with a battle-tested structure.</p>
+      <pre>kodara clone-pattern https://github.com/tiangolo/fastapi --into ./my-new-api</pre>
+      <p>Output:</p>
+      <pre>Cloning pattern from github.com/tiangolo/fastapi...
+
+  Scanned: 142 files
+  Patterns applied: routing, dependency-injection, middleware
+
+  Created: ./my-new-api/
+    app/
+    app/api/
+    app/core/
+    app/models/
+    app/schemas/
+    app/services/
+    tests/
+
+Structure ready. No source code included — only the architecture.</pre>
+    </div>
+
+    <!-- Cloud & Account -->
+    <div class="docs-section" id="cmd-login">
+      <div class="section-label">Cloud &amp; Account <span style="font-family:var(--font-mono);font-size:9px;background:var(--gold);color:var(--forest);padding:2px 7px;letter-spacing:0.08em;margin-left:6px;">PRO</span></div>
+      <h2>kodara login / logout / whoami</h2>
+      <p>Authenticate with Kodara Cloud to enable cloud backup, team memory sync, and AI features. Uses email magic link (OTP) — no password required.</p>
+      <pre>kodara login                    # prompts for email, sends OTP
+kodara login --email you@co.com # skip the prompt
+kodara whoami                   # show logged-in account
+kodara logout                   # clear local session</pre>
+      <p>Login flow:</p>
+      <pre>$ kodara login
+Email: you@company.com
+Check your inbox for a 6-digit code.
+Code: 483920
+Logged in as you@company.com</pre>
+      <div class="note">
+        <strong>Required for:</strong> cloud backup/restore, team memory push/pull, and AI features in <code>kodara why</code> and <code>kodara simulate-change</code>.
+      </div>
+    </div>
+
+    <div class="docs-section" id="cmd-backup">
+      <h2>kodara backup / restore / backups</h2>
+      <p>Back up the current project index to Kodara Cloud. Restore it on any machine. Never lose your architectural memory after a <code>git clean</code> or a fresh clone.</p>
+      <pre>kodara backup                          # upload .kodara/ to cloud
+kodara backups                         # list all cloud backups
+kodara restore my-project              # download latest backup
+kodara restore my-project --path /dir  # restore to custom path</pre>
+      <p>Output examples:</p>
+      <pre># backup
+Backed up: my-project (84 files) -> cloud
+Backup ID: bkp_20240315_143022
+
+# backups
+Cloud Backups
+  my-project      84 files   2024-03-15 14:30
+  my-api          61 files   2024-03-10 09:15
+  old-monolith    203 files  2024-02-28 18:44
+
+# restore
+Restored: 84 files -> .kodara/</pre>
+      <div class="note">
+        <strong>Requires login.</strong> Run <code>kodara login</code> first.
+      </div>
+    </div>
+
     <!-- Team Tools -->
     <div class="docs-section" id="cmd-bus-factor">
       <div class="section-label">Team Tools <span style="font-family:var(--font-mono);font-size:9px;background:var(--coral);color:#fff;padding:2px 7px;letter-spacing:0.08em;margin-left:6px;">TEAM</span></div>
@@ -867,7 +1021,7 @@ kodara check-architecture    # Validate current state against rules</pre>
       <h2>MCP — Model Context Protocol</h2>
       <p>Kodara includes a built-in MCP server. Instead of copy-pasting context manually, your AI tool fetches it automatically on every query. Works with Claude Desktop, Cursor, Windsurf, VS Code, and any MCP-compatible tool.</p>
       <div class="note">
-        <strong>PRO feature.</strong> MCP requires an active Kodara Pro subscription. Run <code>kodara login</code> to authenticate first.
+        <strong>PRO feature.</strong> MCP is included in Kodara Pro. Run <code>kodara mcp --setup</code> to configure — no login required to use MCP locally. Login is only needed for cloud backup features.
       </div>
 
       <h3>Setup in one command</h3>
