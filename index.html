@@ -875,6 +875,93 @@
     color: rgba(255,255,255,0.7);
   }
 
+  /* ── Extension Section ────────────────────────────────────────────────── */
+  .ext-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .ext-left {
+    background: var(--bg);
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+  }
+  .ext-title {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+  .ext-desc {
+    font-size: 15px;
+    opacity: 0.6;
+    line-height: 1.7;
+    max-width: 360px;
+  }
+  .ext-editors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .ext-right {
+    background: var(--forest);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ext-panel {
+    width: 100%;
+    max-width: 340px;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .ext-panel-header {
+    background: rgba(255,255,255,0.07);
+    padding: 8px 14px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.4);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .ext-panel-body { padding: 8px 0; }
+  .ext-panel-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.75);
+  }
+  .ext-panel-item:hover { background: rgba(255,255,255,0.05); }
+  .ext-panel-item .pro-badge {
+    font-size: 9px;
+    color: var(--gold);
+    opacity: 0.8;
+  }
+  .ext-panel-item .team-badge {
+    font-size: 9px;
+    color: var(--coral);
+    opacity: 0.8;
+  }
+  .ext-panel-separator {
+    padding: 8px 14px 4px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.25);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    margin-top: 4px;
+  }
+
   /* ── Mobile ───────────────────────────────────────────────────────────── */
   @media (max-width: 900px) {
     nav { display: none; }
@@ -892,6 +979,9 @@
     .commands-grid { grid-template-columns: 1fr; }
     .mcp-grid { grid-template-columns: 1fr; }
     .mcp-tools-row { grid-template-columns: 1fr 1fr; }
+    .ext-grid { grid-template-columns: 1fr; }
+    .ext-right { display: none; }
+    .ext-left { padding: 32px 24px; }
     footer { flex-direction: column; align-items: flex-start; gap: 16px; }
     .footer-nav { flex-wrap: wrap; gap: 16px; }
     .section-title { font-size: 36px; }
@@ -943,6 +1033,7 @@
     <a href="#numbers">Numbers</a>
     <a href="#commands">Commands</a>
     <a href="#mcp">MCP</a>
+    <a href="#extension">Extension</a>
     <a href="#pricing">Pricing</a>
     <a href="docs.html">Docs</a>
   </nav>
@@ -1456,10 +1547,60 @@ kodara snapshot → saved 2026-03-12</pre>
 
 <div class="section-divider"></div>
 
+<!-- ── EXTENSION ─────────────────────────────────────────────────────────── -->
+<section id="extension">
+  <div class="section-header">
+    <span class="section-index">05 / Extension</span>
+    <h2 class="section-title">All commands.<br>Right in your editor.</h2>
+  </div>
+
+  <div class="ext-grid">
+    <!-- Left -->
+    <div class="ext-left">
+      <p class="ext-desc">Every Kodara command available as a sidebar button — no terminal switching. Free, Pro, Team, and Enterprise tiers visible at a glance. Pro and above show an upgrade prompt until you activate.</p>
+      <div class="ext-editors">
+        <div class="badge"><div class="dot forest"></div><span>VS Code</span></div>
+        <div class="badge"><div class="dot forest"></div><span>Cursor</span></div>
+        <div class="badge"><div class="dot forest"></div><span>Windsurf</span></div>
+        <div class="badge"><div class="dot forest"></div><span>Trae</span></div>
+      </div>
+      <div>
+        <a href="https://marketplace.visualstudio.com/items?itemName=kodara.kodara" target="_blank" rel="noopener noreferrer" class="btn btn-solid" style="display:inline-flex;">Install Extension</a>
+      </div>
+    </div>
+    <!-- Right — panel mockup -->
+    <div class="ext-right">
+      <div class="ext-panel">
+        <div class="ext-panel-header">Kodara — Actions</div>
+        <div class="ext-panel-body">
+          <div class="ext-panel-item"><span>$(database) &nbsp; Init Project</span></div>
+          <div class="ext-panel-item"><span>$(search) &nbsp;&nbsp;&nbsp; Ask</span></div>
+          <div class="ext-panel-item"><span>$(info) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Show Status</span></div>
+          <div class="ext-panel-item"><span>$(book) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Architecture</span></div>
+          <div class="ext-panel-item"><span>$(history) &nbsp;&nbsp; File History</span></div>
+          <div class="ext-panel-item"><span>$(save) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Save Snapshot</span></div>
+          <div class="ext-panel-item"><span>$(graph) &nbsp;&nbsp;&nbsp;&nbsp; Token Savings</span></div>
+          <div class="ext-panel-separator">PRO — $19/month</div>
+          <div class="ext-panel-item"><span>$(zap) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Impact Analysis</span><span class="pro-badge">Pro</span></div>
+          <div class="ext-panel-item"><span>$(question) &nbsp; Why This File</span><span class="pro-badge">Pro</span></div>
+          <div class="ext-panel-item"><span>$(play-circle) Simulate Change</span><span class="pro-badge">Pro</span></div>
+          <div class="ext-panel-item"><span>$(flame) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Heatmap</span><span class="pro-badge">Pro</span></div>
+          <div class="ext-panel-separator">TEAM — $25/user</div>
+          <div class="ext-panel-item"><span>$(person) &nbsp;&nbsp;&nbsp; Onboard Guide</span><span class="team-badge">Team</span></div>
+          <div class="ext-panel-item"><span>$(warning) &nbsp;&nbsp; Bus Factor</span><span class="team-badge">Team</span></div>
+          <div class="ext-panel-item"><span>$(shield) &nbsp;&nbsp;&nbsp; Check Architecture</span><span class="team-badge">Team</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
 <!-- ── PRICING ─────────────────────────────────────────────────────────────── -->
 <section id="pricing">
   <div class="section-header">
-    <span class="section-index">05 / Pricing</span>
+    <span class="section-index">06 / Pricing</span>
     <h2 class="section-title">Simple pricing.<br>Immediate ROI.</h2>
   </div>
   <div class="pricing-grid">
