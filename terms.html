@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kodara — Terms of Service</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F7F7F5;
+    --forest: #1A3C2B;
+    --border: rgba(58,58,56,0.20);
+    --mint: #9EFFBF;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--forest);
+    font-family: var(--font-display);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 64px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    z-index: 100;
+  }
+
+  .header-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: var(--forest);
+  }
+  .logo-box {
+    width: 32px; height: 32px;
+    background: var(--forest);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-box span { color: #fff; font-family: var(--font-mono); font-size: 14px; font-weight: 600; }
+  .logo-name { font-family: var(--font-display); font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+
+  header nav a {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--forest);
+    opacity: 0.6;
+    text-decoration: none;
+    margin-left: 24px;
+  }
+  header nav a:hover { opacity: 1; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    text-decoration: none; cursor: pointer; border: none;
+    transition: all 0.2s;
+  }
+  .btn-solid {
+    background: var(--forest); color: #fff;
+    padding: 0 16px; height: 36px;
+  }
+  .btn-solid:hover { background: #2d6347; }
+
+  .content {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 112px 32px 80px;
+  }
+
+  .label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    opacity: 0.4;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  .updated {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    opacity: 0.4;
+    margin-bottom: 48px;
+  }
+
+  h2 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 40px 0 12px;
+  }
+
+  p { opacity: 0.75; margin-bottom: 14px; line-height: 1.75; }
+
+  ul {
+    opacity: 0.75;
+    padding-left: 20px;
+    margin-bottom: 14px;
+    line-height: 1.75;
+  }
+
+  ul li { margin-bottom: 6px; }
+
+  a { color: var(--forest); }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="header-logo">
+    <div class="logo-box"><span>K</span></div>
+    <span class="logo-name">Kodara</span>
+  </a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="index.html#pricing">Pricing</a>
+    <a href="docs.html">Docs</a>
+  </nav>
+  <a href="https://tally.so/r/5BkybP" target="_blank" rel="noopener noreferrer" class="btn btn-solid" style="height:36px;padding:0 14px;">Get Started</a>
+</header>
+
+<div class="content">
+  <div class="label">Legal</div>
+  <h1>Terms of Service</h1>
+  <p class="updated">Last updated: March 16, 2026</p>
+
+  <p>These Terms of Service ("Terms") govern your access to and use of Kodara ("Service"), provided by Kodara ("we", "us", "our"). By using the Service, you agree to these Terms.</p>
+
+  <h2>1. The Service</h2>
+  <p>Kodara is a developer tool that indexes codebases and provides architectural context for AI-assisted development. The Service includes a CLI package, a cloud backend, and optional cloud storage features.</p>
+
+  <h2>2. Accounts and Subscriptions</h2>
+  <p>Some features require a paid subscription (Pro or Team). Subscriptions are billed monthly and renew automatically unless cancelled. You may cancel at any time — your access continues until the end of the current billing period.</p>
+  <ul>
+    <li><strong>Free tier</strong> — no payment required, limited to 200 files per project</li>
+    <li><strong>Pro ($19/month)</strong> — unlimited files, cloud backup, MCP integration, AI features</li>
+    <li><strong>Team ($25/user/month)</strong> — everything in Pro, plus shared team memory</li>
+  </ul>
+
+  <h2>3. Acceptable Use</h2>
+  <p>You agree not to:</p>
+  <ul>
+    <li>Use the Service to index or store code you do not have rights to</li>
+    <li>Attempt to reverse-engineer or extract the backend algorithms</li>
+    <li>Resell, sublicense, or redistribute the Service</li>
+    <li>Use the Service in a way that violates any applicable law</li>
+  </ul>
+
+  <h2>4. Your Data</h2>
+  <p>Kodara processes metadata about your codebase (file names, dependency graphs, summaries). We do not store your actual source code on our servers. Index metadata sent to the cloud backend is used solely to provide the Service and is not shared with third parties.</p>
+  <p>You retain full ownership of your code and any data you submit to the Service.</p>
+
+  <h2>5. Availability</h2>
+  <p>We aim for high availability but do not guarantee uninterrupted access. The Service is provided "as is". We are not liable for any downtime, data loss, or interruptions.</p>
+
+  <h2>6. Refunds</h2>
+  <p>If you are not satisfied with a paid subscription, contact us within 7 days of your first payment for a full refund. Refunds are not available after 7 days or for renewals.</p>
+
+  <h2>7. Termination</h2>
+  <p>You may stop using the Service at any time. We reserve the right to suspend or terminate accounts that violate these Terms. On termination, your cloud data will be deleted within 30 days.</p>
+
+  <h2>8. Changes to Terms</h2>
+  <p>We may update these Terms from time to time. We will notify users of material changes via email or in-app notice. Continued use of the Service after changes constitutes acceptance.</p>
+
+  <h2>9. Contact</h2>
+  <p>Questions about these Terms? Email us at <a href="mailto:support@getkodara.dev">support@getkodara.dev</a>.</p>
+
+  <hr class="divider">
+  <p style="font-size:13px;">See also: <a href="privacy.html">Privacy Policy</a></p>
+</div>
+
+</body>
+</html>
