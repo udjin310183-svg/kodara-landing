@@ -1640,10 +1640,6 @@ kodara snapshot → saved 2026-03-12</pre>
             <div class="dot gold"></div>
             <span style="color:var(--gold);">Most Popular</span>
           </div>
-          <div class="badge" style="border-color:rgba(255,140,105,0.6);background:rgba(255,140,105,0.12);">
-            <div class="dot coral"></div>
-            <span style="color:var(--coral);">Soon</span>
-          </div>
         </div>
       </div>
       <div>
@@ -1667,16 +1663,12 @@ kodara snapshot → saved 2026-03-12</pre>
         </div>
       </div>
       <div class="pricing-terminal">simulate-change auth/session.py<br>Affected: 49 modules &nbsp; Cost: ~80h<br>Risk: CRITICAL &nbsp;&nbsp;&nbsp;&nbsp; Paths: 3</div>
-      <span class="btn" style="width:100%;justify-content:center;opacity:0.45;cursor:not-allowed;background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.2);">Coming Soon</span>
+      <a href="#" class="btn" style="width:100%;justify-content:center;" data-paddle-price-id="pri_01kkvc03qzkj5smmmsbwv2hbw7" onclick="Paddle.Checkout.open({items:[{priceId:'pri_01kkvc03qzkj5smmmsbwv2hbw7',quantity:1}]});return false;">Get Pro →</a>
     </div>
     <!-- Team -->
     <div class="pricing-card">
       <div class="pricing-header">
         <span class="pricing-name">Team</span>
-        <div class="badge" style="border-color:rgba(255,140,105,0.5);background:rgba(255,140,105,0.08);">
-          <div class="dot coral"></div>
-          <span style="color:var(--coral);">Soon</span>
-        </div>
       </div>
       <div>
         <div class="pricing-price">$25</div>
@@ -1692,7 +1684,7 @@ kodara snapshot → saved 2026-03-12</pre>
         <div class="feature-item"><div style="width:8px;height:8px;background:var(--mint);flex-shrink:0;"></div>10 devs → saves $6,385/month</div>
       </div>
       <div class="pricing-terminal">bus-factor: 3 critical files<br>auth/session.py &nbsp; sole: @alice<br>payment/core.py &nbsp; sole: @bob</div>
-      <span class="btn btn-outline" style="width:100%;justify-content:center;opacity:0.4;cursor:not-allowed;">Coming Soon</span>
+      <a href="#" class="btn btn-outline" style="width:100%;justify-content:center;" onclick="Paddle.Checkout.open({items:[{priceId:'pri_01kkvca7pg0q0y9jsjfgvztkyp',quantity:1}]});return false;">Get Team →</a>
     </div>
     <!-- Enterprise -->
     <div class="pricing-card">
@@ -1770,5 +1762,11 @@ kodara snapshot → saved 2026-03-12</pre>
 </footer>
 
 <script src="app.js" defer></script>
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script>
+  Paddle.Initialize({
+    token: 'live_ddfeead5a96a15d0cecbfd56fc4',
+  });
+</script>
 </body>
 </html>
